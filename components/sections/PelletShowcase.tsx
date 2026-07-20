@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import type { MotionValue } from 'framer-motion';
+import { motion, useTransform, useReducedMotion } from 'framer-motion';
 import {
   Shield,
   Droplets,
@@ -17,6 +19,7 @@ import { Tabs } from '@/components/ui/Tabs';
 import { Toggle } from '@/components/ui/Toggle';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
+import { ScrollScrubVideo } from '@/components/ui/ScrollScrubVideo';
 import { cn } from '@/lib/cn';
 
 export function PelletShowcase() {
@@ -62,32 +65,17 @@ const layers = [
 function Anatomy() {
   return (
     <div className="grid items-center gap-8 lg:grid-cols-2">
-      {/* Schematic */}
-      <Card className="relative aspect-square overflow-hidden p-0">
-        <div className="absolute inset-0 bg-grid-fine opacity-40" aria-hidden />
-        <div className="absolute left-4 top-4 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
-          Material matrix · cross-section
-        </div>
-
-        <div className="flex h-full items-center justify-center">
-          <div className="relative flex h-[64%] w-[64%] items-center justify-center rounded-full border-2 border-dashed border-amber-deep/40 bg-amber-soft/40">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-amber-deep/30 bg-surface px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-amber-deep">
-              Bagasse shell
-            </span>
-            <div className="relative flex h-[62%] w-[62%] items-center justify-center rounded-full border-2 border-botanical/40 bg-botanical-soft/60">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-botanical/30 bg-surface px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-botanical">
-                Coir core
-              </span>
-              <div className="flex h-[55%] w-[55%] flex-col items-center justify-center gap-1 rounded-full bg-ink text-center">
-                <Sprout className="h-6 w-6 text-amber" strokeWidth={2} aria-hidden />
-                <span className="px-2 font-mono text-[9px] uppercase leading-tight tracking-wider text-white/80">
-                  Living AMF spores
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
+      {/* Scroll-scrubbed 3D turntable of the pellet (Blender render). Until the
+          video file is dropped into /public/media, the cross-section schematic
+          below stands in — and it turns with the same scroll gesture, so the
+          interaction is live either way. */}
+      <ScrollScrubVideo
+        src="/media/myco-pellet.mp4"
+        webmSrc="/media/myco-pellet.webm"
+        poster="/media/myco-pellet-poster.jpg"
+        label="Myco-Pellet · 3D turntable"
+        fallback={(progress) => <PelletSchematic progress={progress} />}
+      />
 
       {/* Layer callouts */}
       <div className="space-y-4">
@@ -111,6 +99,45 @@ function Anatomy() {
           <Badge tone="botanical">Circular economy</Badge>
           <Badge tone="neutral">100% agri-waste derived</Badge>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Cross-section schematic used as the scrub-video fallback. It swings on its Y
+ * axis with the shared scroll progress, hinting at the 3D turntable that
+ * replaces it once /public/media/myco-pellet.mp4 exists.
+ */
+function PelletSchematic({ progress }: { progress: MotionValue<number> }) {
+  const reduce = useReducedMotion();
+  const rotateY = useTransform(progress, [0, 1], reduce ? [0, 0] : [-24, 24]);
+  const scale = useTransform(progress, [0, 0.5, 1], reduce ? [1, 1, 1] : [0.95, 1.03, 0.95]);
+
+  return (
+    <div className="absolute inset-0" style={{ perspective: 900 }}>
+      <div className="absolute inset-0 bg-grid-fine opacity-40" aria-hidden />
+
+      <div className="flex h-full items-center justify-center">
+        <motion.div
+          style={{ rotateY, scale, transformStyle: 'preserve-3d' }}
+          className="relative flex h-[64%] w-[64%] items-center justify-center rounded-full border-2 border-dashed border-amber-deep/40 bg-amber-soft/40"
+        >
+          <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-amber-deep/30 bg-surface px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-amber-deep">
+            Bagasse shell
+          </span>
+          <div className="relative flex h-[62%] w-[62%] items-center justify-center rounded-full border-2 border-botanical/40 bg-botanical-soft/60">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-botanical/30 bg-surface px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-botanical">
+              Coir core
+            </span>
+            <div className="flex h-[55%] w-[55%] flex-col items-center justify-center gap-1 rounded-full bg-ink text-center">
+              <Sprout className="h-6 w-6 text-amber" strokeWidth={2} aria-hidden />
+              <span className="px-2 font-mono text-[9px] uppercase leading-tight tracking-wider text-white/80">
+                Living AMF spores
+              </span>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
