@@ -71,8 +71,8 @@ function Anatomy() {
           interaction is live either way. */}
       <ScrollScrubVideo
         src="/media/myco-pellet.mp4"
-        webmSrc="/media/myco-pellet.webm"
         poster="/media/myco-pellet-poster.jpg"
+        ratio="4 / 5"
         label="Myco-Pellet · 3D turntable"
         fallback={(progress) => <PelletSchematic progress={progress} />}
       />

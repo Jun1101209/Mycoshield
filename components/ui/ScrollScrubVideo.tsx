@@ -52,6 +52,7 @@ export function ScrollScrubVideo({
   const rafId = useRef<number | null>(null);
 
   const reduce = useReducedMotion();
+  const [inView, setInView] = useState(false);
   const [failed, setFailed] = useState(false);
   const [ready, setReady] = useState(false);
 
@@ -94,31 +95,81 @@ export function ScrollScrubVideo({
     };
   }, [reduce, failed, ready, scrollYProgress]);
 
-  // Detect whether the video actually loads. With <source> children the `error`
-  // event fires on the <source> (not the <video>) and doesn't bubble, so it's
-  // unreliable through React. Instead poll the media load state: once metadata
-  // arrives we're ready; once the browser exhausts every source it flips to
-  // NETWORK_NO_SOURCE and we fall back to the schematic.
+  // Only load the video once the section nears the viewport. Off-screen,
+  // Chromium defers a preload="auto" video and parks it at NETWORK_NO_SOURCE —
+  // indistinguishable from a genuinely missing file — so we must not judge the
+  // load state until we've actively started it.
   useEffect(() => {
-    if (reduce) return;
-    let timer: ReturnType<typeof setTimeout>;
-    let tries = 0;
-    const check = () => {
-      const video = videoRef.current;
-      if (!video) return;
-      if (video.readyState >= 1 /* HAVE_METADATA */ && !Number.isNaN(video.duration)) {
-        setReady(true);
-        return;
-      }
-      if (video.networkState === video.NETWORK_NO_SOURCE || video.error) {
-        setFailed(true);
-        return;
-      }
-      if (tries++ < 100) timer = setTimeout(check, 120); // give up polling after ~12s
-    };
-    check();
-    return () => clearTimeout(timer);
+    const el = containerRef.current;
+    if (reduce || !el) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '400px 0px' }, // start a little before it scrolls in
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, [reduce]);
+
+  // Once in view, force the fetch and resolve the outcome. Success = metadata
+  // decoded; failure = a media error or an exhausted source list *after* we
+  // started loading (now NETWORK_NO_SOURCE genuinely means "no such file").
+  useEffect(() => {
+    if (reduce || !inView) return;
+    const video = videoRef.current;
+    if (!video) return;
+    video.load();
+
+    let settled = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const succeed = () => {
+      if (settled) return;
+      settled = true;
+      setReady(true);
+    };
+    const fail = () => {
+      if (settled) return;
+      settled = true;
+      setFailed(true);
+    };
+    video.addEventListener('loadedmetadata', succeed);
+    video.addEventListener('loadeddata', succeed);
+    video.addEventListener('error', fail);
+
+    // load() momentarily resets networkState to NETWORK_NO_SOURCE before the
+    // fetch starts, so a single NO_SOURCE reading is not proof of failure. Only
+    // give up once it has *persisted* (a real file reaches metadata well within
+    // this window); a hard media error fails immediately.
+    let noSourceStreak = 0;
+    let tries = 0;
+    const poll = () => {
+      if (settled) return;
+      if (video.readyState >= 1 /* HAVE_METADATA */) return succeed();
+      if (video.error) return fail();
+      if (video.networkState === video.NETWORK_NO_SOURCE) {
+        if (++noSourceStreak >= 14) return fail(); // ~1.7s of continuous NO_SOURCE
+      } else {
+        noSourceStreak = 0;
+      }
+      if (tries++ < 80) timer = setTimeout(poll, 120); // ~10s ceiling
+    };
+    timer = setTimeout(poll, 120);
+
+    return () => {
+      video.removeEventListener('loadedmetadata', succeed);
+      video.removeEventListener('loadeddata', succeed);
+      video.removeEventListener('error', fail);
+      clearTimeout(timer);
+    };
+  }, [reduce, inView]);
 
   const showVideo = !failed && !reduce;
 
@@ -138,8 +189,8 @@ export function ScrollScrubVideo({
           muted
           playsInline
           preload="auto"
-          // No autoplay — the scroll gesture is the transport.
-          onLoadedMetadata={() => setReady(true)}
+          // No autoplay — the scroll gesture is the transport. Load is kicked
+          // off by the in-view effect below (see video.load()).
           className="absolute inset-0 h-full w-full object-cover"
         >
           {webmSrc && <source src={asset(webmSrc)} type="video/webm" />}
