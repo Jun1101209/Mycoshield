@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import type { MotionValue } from 'framer-motion';
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import { useState } from 'react';
 import {
   Shield,
   Droplets,
@@ -19,17 +17,17 @@ import { Tabs } from '@/components/ui/Tabs';
 import { Toggle } from '@/components/ui/Toggle';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
-import { ScrollScrubVideo } from '@/components/ui/ScrollScrubVideo';
 import { cn } from '@/lib/cn';
 
 export function PelletShowcase() {
   return (
-    <section id="pellet" className="scroll-mt-20 bg-offwhite py-24 sm:py-28">
+    <section id="pellet" className="scroll-mt-20 bg-surface py-24 sm:py-28">
       <Container>
         <SectionHeading
-          eyebrow="Deep-tech hardware"
+          eyebrow="Hardware · Circular economy"
+          accent="ochre"
           title="Sugarcane shell. Coconut core. Living spores."
-          lede="Each Myco-Pellet is a circular-economy micro-habitat, engineered to keep obligate fungi alive from factory to field — then release them exactly where roots need them."
+          lede="The moment the dashboard flags a red zone, the fix is already biodegradable, built from farm waste that would otherwise be burned."
         />
 
         <div className="mt-12">
@@ -50,74 +48,41 @@ export function PelletShowcase() {
 const layers = [
   {
     icon: Shield,
-    tag: 'Outer mechanical shell',
-    material: 'Sugarcane Bagasse',
-    body: 'Protects biological viability against high-impact shipping and severe soil compaction. Gradually releases simple carbon compounds to trigger fungal growth.',
+    tag: 'Outer shell',
+    material: 'Bagasse shell',
+    body: 'Compressed sugarcane fiber shields the pellet through shipping and burial, then releases simple carbon to wake the fungi.',
+    color: '#8A5A32',
   },
   {
     icon: Droplets,
-    tag: 'Inner biological core',
-    material: 'Coconut Coir',
-    body: 'A localized micro-refuge that retains 8–10× its weight in water, buffers thermal stress, and holds an optimal pH (5.5–6.5) for spore germination.',
+    tag: 'Inner core',
+    material: 'Coconut coir core',
+    body: 'A porous micro-refuge holds water and a hospitable pH while the spores germinate in the soil.',
+    color: '#C6902F',
+  },
+  {
+    icon: Sprout,
+    tag: 'Payload',
+    material: 'Native-strain AM spores',
+    body: 'Fungal spores matched to the region’s own soil chemistry, ready to re-thread the underground network on contact with moisture.',
+    color: '#1F6B43',
   },
 ];
 
-/**
- * `true` once the viewport is wide enough (≥ lg) for the pinned scroll-scrub to
- * feel good. Below that we skip pinning — a phone can't spare a full extra
- * screen of scroll-jacking, and the two columns stack tall past the viewport.
- */
-function useDesktopViewport() {
-  const [isDesktop, setIsDesktop] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)');
-    const update = () => setIsDesktop(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
-  return isDesktop;
-}
-
 function Anatomy() {
-  const reduce = useReducedMotion();
-  const isDesktop = useDesktopViewport();
-  // Pin + scope the scroll only on desktop with motion allowed; otherwise the
-  // pellet still rotates, but off the frame's ordinary transit through the page.
-  const pinned = isDesktop && !reduce;
-
-  // A tall track behind a sticky viewport: while the sticky frame is pinned,
-  // 0→1 progress is spent rotating the pellet. Only when the track scrolls out
-  // does the page move on — so the up/down gesture belongs to this section, not
-  // the whole page, exactly until the turntable finishes.
-  const trackRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ['start start', 'end end'],
-  });
-
-  const content = (
+  return (
     <div className="grid w-full items-center gap-8 lg:grid-cols-2">
-      {/* Scroll-scrubbed 3D turntable of the pellet (Blender render). Until the
-          video file is dropped into /public/media, the cross-section schematic
-          below stands in — and it turns with the same scroll gesture, so the
-          interaction is live either way. */}
-      <ScrollScrubVideo
-        src="/media/myco-pellet.mp4"
-        poster="/media/myco-pellet-poster.jpg"
-        ratio="4 / 5"
-        label="Myco-Pellet · 3D turntable"
-        progress={pinned ? scrollYProgress : undefined}
-        fallback={(progress) => <PelletSchematic progress={progress} />}
-      />
+      <PelletVisual />
 
-      {/* Layer callouts */}
       <div className="space-y-4">
         {layers.map((layer) => (
           <Card key={layer.material} className="p-5">
             <div className="flex items-start gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-mist">
-                <layer.icon className="h-5 w-5 text-ink" strokeWidth={1.75} aria-hidden />
+              <span
+                className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                style={{ background: `${layer.color}1a` }}
+              >
+                <layer.icon className="h-5 w-5" style={{ color: layer.color }} strokeWidth={1.75} aria-hidden />
               </span>
               <div>
                 <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
@@ -129,63 +94,71 @@ function Anatomy() {
             </div>
           </Card>
         ))}
-        <div className="flex items-center gap-2 pl-1">
+        <div className="flex flex-wrap items-center gap-2 pl-1">
           <Badge tone="botanical">Circular economy</Badge>
           <Badge tone="neutral">100% agri-waste derived</Badge>
         </div>
       </div>
     </div>
   );
-
-  // The DOM shape is identical whether pinned or not (same two nested divs), so
-  // toggling `pinned` never remounts the video and drops its decoded frames.
-  return (
-    <div ref={trackRef} className={pinned ? 'relative h-[220vh]' : undefined}>
-      <div
-        className={
-          pinned ? 'sticky top-0 flex min-h-screen items-center py-16' : undefined
-        }
-      >
-        {content}
-      </div>
-    </div>
-  );
 }
 
 /**
- * Cross-section schematic used as the scrub-video fallback. It swings on its Y
- * axis with the shared scroll progress, hinting at the 3D turntable that
- * replaces it once /public/media/myco-pellet.mp4 exists.
+ * Lightweight, self-contained pellet cross-section. Pure CSS transforms (a slow
+ * sheen sweep + gently drifting spores) with no scroll listeners, no video and
+ * no rAF seek loop, so it stays smooth on any device. All motion is paused by
+ * the global prefers-reduced-motion rule.
  */
-function PelletSchematic({ progress }: { progress: MotionValue<number> }) {
-  const reduce = useReducedMotion();
-  const rotateY = useTransform(progress, [0, 1], reduce ? [0, 0] : [-24, 24]);
-  const scale = useTransform(progress, [0, 0.5, 1], reduce ? [1, 1, 1] : [0.95, 1.03, 0.95]);
-
+function PelletVisual() {
   return (
-    <div className="absolute inset-0" style={{ perspective: 900 }}>
+    <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden rounded-2xl border border-hairline bg-offwhite shadow-card">
       <div className="absolute inset-0 bg-grid-fine opacity-40" aria-hidden />
 
-      <div className="flex h-full items-center justify-center">
-        <motion.div
-          style={{ rotateY, scale, transformStyle: 'preserve-3d' }}
-          className="relative flex h-[64%] w-[64%] items-center justify-center rounded-full border-2 border-dashed border-amber-deep/40 bg-amber-soft/40"
-        >
+      <div className="pointer-events-none absolute left-4 top-4 z-10 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+        Myco-Pellet · cross-section
+      </div>
+
+      {/* concentric shell -> core */}
+      <div className="relative flex h-[64%] w-[64%] items-center justify-center rounded-full bg-[#8A5A32]/15 ring-1 ring-[#8A5A32]/40">
+        {/* slow rotating scan sheen */}
+        <div
+          className="absolute inset-0 rounded-full animate-spin-slow"
+          style={{
+            background:
+              'conic-gradient(from 0deg, rgba(155,203,91,0.35), transparent 28%, transparent 72%, rgba(155,203,91,0.2))',
+            maskImage: 'radial-gradient(circle, transparent 58%, #000 60%)',
+            WebkitMaskImage: 'radial-gradient(circle, transparent 58%, #000 60%)',
+          }}
+          aria-hidden
+        />
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-[#8A5A32]/30 bg-surface px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-[#8A5A32]">
+          Bagasse shell
+        </span>
+
+        <div className="relative flex h-[64%] w-[64%] items-center justify-center rounded-full bg-amber-soft ring-1 ring-amber-deep/40">
           <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-amber-deep/30 bg-surface px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-amber-deep">
-            Bagasse shell
+            Coir core
           </span>
-          <div className="relative flex h-[62%] w-[62%] items-center justify-center rounded-full border-2 border-botanical/40 bg-botanical-soft/60">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-botanical/30 bg-surface px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-botanical">
-              Coir core
+
+          <div className="relative flex h-[58%] w-[58%] flex-col items-center justify-center gap-1 rounded-full bg-ink text-center">
+            {/* drifting spores */}
+            <span className="absolute left-[30%] top-[34%] h-1.5 w-1.5 rounded-full bg-signal animate-spore-drift" aria-hidden />
+            <span
+              className="absolute left-[62%] top-[52%] h-1.5 w-1.5 rounded-full bg-signal animate-spore-drift"
+              style={{ animationDelay: '1.2s' }}
+              aria-hidden
+            />
+            <span
+              className="absolute left-[46%] top-[64%] h-1 w-1 rounded-full bg-signal animate-spore-drift"
+              style={{ animationDelay: '2.4s' }}
+              aria-hidden
+            />
+            <Sprout className="relative h-6 w-6 text-signal" strokeWidth={2} aria-hidden />
+            <span className="relative px-2 font-mono text-[9px] uppercase leading-tight tracking-wider text-white/80">
+              Living AM spores
             </span>
-            <div className="flex h-[55%] w-[55%] flex-col items-center justify-center gap-1 rounded-full bg-ink text-center">
-              <Sprout className="h-6 w-6 text-amber" strokeWidth={2} aria-hidden />
-              <span className="px-2 font-mono text-[9px] uppercase leading-tight tracking-wider text-white/80">
-                Living AMF spores
-              </span>
-            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -214,27 +187,27 @@ const products: Product[] = [
     icon: Waves,
     strains: [
       { name: 'Claroideoglomus etunicatum', role: 'Halotolerant ionic filter' },
-      { name: 'Funneliformis geosporum', role: 'Blocks toxic Na⁺ / Cl⁻, pumps K⁺' },
+      { name: 'Funneliformis geosporum', role: 'Blocks toxic Na and Cl, pumps K' },
     ],
     additives: [
-      { icon: FlaskRound, text: 'Gypsum (CaSO₄) chemically displaces soil sodium' },
-      { icon: Beaker, text: 'Slow-dissolving liquid alginate coating' },
+      { icon: FlaskRound, text: 'Gypsum displaces sodium locked in the soil' },
+      { icon: Beaker, text: 'Slow-dissolving alginate coating' },
     ],
   },
   {
     id: 'hydro',
-    name: 'Hydro-Hydro',
+    name: 'Arid-Guard',
     region: 'Central Highlands',
-    target: 'Arid & drought-stricken regions',
+    target: 'Arid and drought-stricken regions',
     accent: 'amber',
     icon: Sun,
     strains: [
       { name: 'Rhizophagus irregularis', role: 'Aggressive hyphal network builder' },
-      { name: 'Funneliformis mosseae', role: 'Crawls into micro-soil pores' },
+      { name: 'Funneliformis mosseae', role: 'Crawls into micro soil pores' },
     ],
     additives: [
-      { icon: Droplets, text: 'Cornstarch superabsorbent hydrogel (300× water weight)' },
-      { icon: Thermometer, text: 'Humic growth acids for root vigor' },
+      { icon: Droplets, text: 'Cornstarch hydrogel holds 300× its weight in water' },
+      { icon: Thermometer, text: 'Humic acids for early root vigor' },
     ],
   },
 ];
@@ -257,15 +230,11 @@ function ProductMatrix() {
             sublabel: p.region,
           }))}
         />
-        <Card
-          className={cn(
-            'overflow-hidden p-0',
-          )}
-        >
+        <Card className="overflow-hidden p-0">
           <div
             className={cn(
               'flex items-center gap-4 px-6 py-5',
-              isAmber ? 'bg-amber-soft/50' : 'bg-botanical-soft/50',
+              isAmber ? 'bg-amber-soft/60' : 'bg-botanical-soft/50',
             )}
           >
             <span

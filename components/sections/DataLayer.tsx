@@ -1,4 +1,4 @@
-import { Satellite, LineChart, Microscope, Circle } from 'lucide-react';
+import { Satellite, Radar, Circle } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Card } from '@/components/ui/Card';
@@ -6,43 +6,85 @@ import { DataChip } from '@/components/ui/DataChip';
 import { Badge } from '@/components/ui/Badge';
 import { Reveal } from '@/components/ui/Reveal';
 
-const pillars = [
+const scans = [
   {
     icon: Satellite,
-    title: 'Remote sensing fungal tracking',
-    body: 'AI deep-learning models analyze satellite telemetry to track underground biodiversity density from space, aligned to the global registry framework (arXiv:2604.09818v1).',
+    tag: 'Sentinel-2 · MSI',
+    title: 'Optical multispectral scan',
+    body: 'Thirteen light bands read near-infrared and short-wave infrared off the canopy. When the fungi that govern a plant’s water and chlorophyll fail, they leave a stress signature the eye cannot see but the sensor can.',
+    accent: 'signal' as const,
   },
   {
-    icon: LineChart,
-    title: 'Voluntary carbon market integration',
-    body: 'Quantitative monitoring of Glomalin — a highly stable glycoprotein carbon sink — to generate premium, verifiable soil carbon credits.',
+    icon: Radar,
+    tag: 'Sentinel-1 · SAR',
+    title: 'Radar structure scan',
+    body: 'Radar sees straight through storm cloud, measuring the ground’s moisture and roughness. Soil that has lost its fungal threads compacts, and that compaction bends the echo returning to orbit.',
+    accent: 'botanical' as const,
   },
-  {
-    icon: Microscope,
-    title: 'Premium soil consulting',
-    body: 'Elite laboratory analysis and site-specific restoration protocols that help agricultural enterprises hit their ESG metrics with ground-truthed data.',
-  },
+];
+
+const readouts = [
+  { k: 'Fungal network density', v: '38%', sub: 'below baseline', tone: 'text-alert' },
+  { k: 'Glomalin carbon flux', v: '+1.24 t/ha', sub: 'sequestered YTD', tone: 'text-botanical' },
+  { k: 'Priority restoration zones', v: '12', sub: 'flagged this week', tone: 'text-amber-deep' },
 ];
 
 const riskZones = [
   { top: '24%', left: '46%', tone: 'bg-amber-deep', label: 'Central Highlands' },
-  { top: '70%', left: '38%', tone: 'bg-red-500', label: 'Mekong Delta' },
+  { top: '70%', left: '38%', tone: 'bg-alert', label: 'Mekong Delta' },
   { top: '15%', left: '58%', tone: 'bg-botanical', label: 'Red River' },
 ];
 
 export function DataLayer() {
   return (
-    <section id="platform" className="scroll-mt-20 bg-surface py-24 sm:py-28">
+    <section id="signal" className="scroll-mt-20 bg-offwhite py-24 sm:py-28">
       <Container>
         <SectionHeading
-          eyebrow="Enterprise data layer"
-          title="A soil-intelligence platform, from orbit to root zone"
-          lede="MycoShield fuses satellite optical and radar data with soil biology into one commercial dashboard — the monetization engine behind the mission."
+          eyebrow="Layer 01 · Orbit"
+          accent="signal"
+          title="Two satellites read what the eye can’t"
+          lede="Long before a field looks stressed, its light and its radar echo have already shifted. MycoShield fuses two public constellations to catch that first signal."
         />
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-stretch">
-          {/* Dashboard mock */}
-          <Reveal>
+        <div className="mt-12 grid gap-4 lg:grid-cols-2">
+          {scans.map((s, i) => (
+            <Reveal key={s.tag} delay={i * 0.07}>
+              <Card className="h-full p-6">
+                <div className="flex items-center justify-between">
+                  <span
+                    className={
+                      s.accent === 'signal'
+                        ? 'flex h-11 w-11 items-center justify-center rounded-xl bg-signal-soft'
+                        : 'flex h-11 w-11 items-center justify-center rounded-xl bg-botanical-soft/60'
+                    }
+                  >
+                    <s.icon
+                      className={s.accent === 'signal' ? 'h-5 w-5 text-signal-deep' : 'h-5 w-5 text-botanical'}
+                      strokeWidth={1.75}
+                      aria-hidden
+                    />
+                  </span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+                    {s.tag}
+                  </span>
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-ink">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-muted">{s.body}</p>
+              </Card>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Layer 02 · Fusion */}
+        <div id="dashboard" className="mt-20 scroll-mt-24">
+          <SectionHeading
+            eyebrow="Layer 02 · Fusion"
+            accent="green"
+            title="Vietnam, mapped from sky, radar and soil"
+            lede="A self-supervised model cross-references optical scans and radar structure against soil biology, turning indirect surface readings into a live, nationwide map of what is happening below the field."
+          />
+
+          <Reveal className="mt-12">
             <Card className="overflow-hidden p-0">
               {/* browser chrome */}
               <div className="flex items-center gap-2 border-b border-hairline bg-offwhite px-4 py-3">
@@ -63,16 +105,14 @@ export function DataLayer() {
                 {/* stylized satellite risk map */}
                 <div className="relative min-h-[280px] overflow-hidden border-b border-hairline bg-ink p-5 sm:border-b-0 sm:border-r">
                   <div className="absolute inset-0 bg-grid-fine opacity-20" aria-hidden />
-                  {/* scanline */}
                   <div
-                    className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-botanical/30 to-transparent animate-scan"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-signal/30 to-transparent animate-scan"
                     aria-hidden
                   />
                   <div className="relative font-mono text-[10px] uppercase tracking-[0.16em] text-white/50">
                     Vietnam satellite view · live soil risk
                   </div>
 
-                  {/* abstract landmass */}
                   <svg
                     viewBox="0 0 200 300"
                     className="absolute inset-0 mx-auto h-full w-full opacity-70"
@@ -81,8 +121,8 @@ export function DataLayer() {
                   >
                     <path
                       d="M118 22 C128 46 112 74 104 96 C96 118 120 132 116 156 C112 182 86 196 78 222 C70 248 92 266 78 284 C70 292 58 286 60 272 C64 244 82 232 86 208 C90 184 70 172 76 148 C82 122 104 112 108 88 C112 64 98 44 108 26 Z"
-                      fill="rgba(134,201,111,0.16)"
-                      stroke="rgba(156,199,163,0.45)"
+                      fill="rgba(155,203,91,0.16)"
+                      stroke="rgba(155,203,91,0.5)"
                       strokeWidth="1"
                     />
                   </svg>
@@ -108,17 +148,13 @@ export function DataLayer() {
 
                 {/* readout panel */}
                 <div className="space-y-4 p-5">
-                  {[
-                    { k: 'AMF network density', v: '38%', sub: 'below baseline', tone: 'text-red-600' },
-                    { k: 'Glomalin carbon flux', v: '+1.24 t/ha', sub: 'sequestered YTD', tone: 'text-botanical' },
-                    { k: 'Priority restoration zones', v: '12', sub: 'flagged this week', tone: 'text-amber-deep' },
-                  ].map((r) => (
+                  {readouts.map((r) => (
                     <div key={r.k} className="border-b border-hairline pb-3 last:border-0 last:pb-0">
                       <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
                         {r.k}
                       </div>
                       <div className="mt-1 flex items-baseline gap-2">
-                        <span className={`text-2xl font-extrabold tracking-tight ${r.tone}`}>
+                        <span className={`font-serif text-2xl font-semibold tracking-tight ${r.tone}`}>
                           {r.v}
                         </span>
                         <span className="text-xs text-ink-muted">{r.sub}</span>
@@ -130,27 +166,6 @@ export function DataLayer() {
               </div>
             </Card>
           </Reveal>
-
-          {/* Pillars */}
-          <div className="grid gap-4">
-            {pillars.map((pillar, i) => (
-              <Reveal key={pillar.title} delay={i * 0.06}>
-                <Card interactive className="h-full p-5">
-                  <div className="flex items-start gap-4">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-botanical-soft/50">
-                      <pillar.icon className="h-5 w-5 text-botanical" strokeWidth={1.75} aria-hidden />
-                    </span>
-                    <div>
-                      <h3 className="text-base font-bold text-ink">{pillar.title}</h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
-                        {pillar.body}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </Container>
     </section>

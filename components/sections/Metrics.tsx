@@ -14,22 +14,22 @@ type Metric = {
 const metrics: Metric[] = [
   {
     value: '45–62%',
-    label: 'Increase in crop salinity & drought tolerance',
+    label: 'Higher salinity and drought tolerance',
     icon: Droplets,
   },
   {
     value: '97%',
-    label: 'Seedling survival & successful root attachment rate',
+    label: 'Seedling survival and root attachment',
     icon: Sprout,
   },
   {
     value: '3×',
-    label: 'Faster soil biodiverse recovery — from 18 to under 6 months',
+    label: 'Faster soil recovery, 18 months down to under 6',
     icon: Timer,
   },
   {
     value: '35–50%',
-    label: 'Enhanced phosphorus (P) & micronutrient uptake efficiency',
+    label: 'Better phosphorus and micronutrient uptake',
     icon: FlaskConical,
   },
 ];

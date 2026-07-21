@@ -12,35 +12,41 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  /* Offset anchored scroll so sticky nav doesn't cover section headings. */
+  /* Offset anchored scroll so the sticky nav doesn't cover section headings. */
   section[id],
   header[id] {
     scroll-margin-top: 5rem;
   }
 
   body {
-    @apply bg-surface text-ink-body font-sans antialiased;
+    @apply bg-offwhite text-ink-body font-sans antialiased;
     text-rendering: optimizeLegibility;
   }
 
+  /* Editorial serif is reserved for the large display headings (h1, h2); small
+     subheads (h3, h4) stay in the clean sans for a consistent, calm hierarchy. */
   h1,
-  h2,
+  h2 {
+    @apply text-ink font-serif font-semibold tracking-[-0.01em];
+    text-wrap: balance;
+  }
+
   h3,
   h4 {
-    @apply text-ink font-semibold tracking-tight;
+    @apply text-ink font-sans font-semibold tracking-tight;
     text-wrap: balance;
   }
 
   ::selection {
-    background: #fde68a;
-    color: #0f172a;
+    background: #d7ead0;
+    color: #13241c;
   }
 
   /* Accessibility-compliant focus ring on every interactive element. */
   a:focus-visible,
   button:focus-visible,
   [tabindex]:focus-visible {
-    @apply outline-none ring-2 ring-amber-deep ring-offset-2 ring-offset-surface rounded-md;
+    @apply outline-none ring-2 ring-botanical ring-offset-2 ring-offset-offwhite rounded-md;
   }
 }
 
@@ -51,15 +57,15 @@
 
   .bg-grid {
     background-image:
-      linear-gradient(to right, rgba(15, 23, 42, 0.045) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(15, 23, 42, 0.045) 1px, transparent 1px);
+      linear-gradient(to right, rgba(19, 36, 28, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(19, 36, 28, 0.05) 1px, transparent 1px);
     background-size: 32px 32px;
   }
 
   .bg-grid-fine {
     background-image:
-      linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+      linear-gradient(to right, rgba(19, 36, 28, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(19, 36, 28, 0.055) 1px, transparent 1px);
     background-size: 16px 16px;
   }
 }

@@ -5,7 +5,7 @@ type Tone = 'neutral' | 'alert' | 'amber' | 'botanical';
 
 const tones: Record<Tone, { ring: string; icon: string; iconBg: string }> = {
   neutral: { ring: 'border-hairline', icon: 'text-ink-muted', iconBg: 'bg-mist' },
-  alert: { ring: 'border-red-200', icon: 'text-red-600', iconBg: 'bg-red-50' },
+  alert: { ring: 'border-alert/25', icon: 'text-alert', iconBg: 'bg-alert-soft' },
   amber: { ring: 'border-amber-deep/25', icon: 'text-amber-deep', iconBg: 'bg-amber-soft/60' },
   botanical: { ring: 'border-botanical/25', icon: 'text-botanical', iconBg: 'bg-botanical-soft/50' },
 };

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { LegalPage } from '@/components/sections/LegalPage';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — MycoShield',
+  title: 'Terms of Service · MycoShield',
   description: 'The terms governing use of the MycoShield platform and services.',
 };
 

@@ -5,15 +5,15 @@ type Variant = 'primary' | 'outline' | 'ghost';
 const base =
   'inline-flex items-center justify-center gap-2 rounded-full font-semibold ' +
   'min-h-[44px] px-6 text-sm tracking-tight transition-all duration-200 ' +
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-deep ' +
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-botanical ' +
   'focus-visible:ring-offset-2 focus-visible:ring-offset-surface ' +
   'disabled:cursor-not-allowed disabled:opacity-45';
 
 const variants: Record<Variant, string> = {
   primary:
-    'bg-amber-deep text-white shadow-[0_8px_20px_-8px_rgba(217,119,6,0.6)] ' +
-    'hover:bg-[#c2410c] hover:shadow-[0_10px_26px_-8px_rgba(217,119,6,0.7)] ' +
-    'active:translate-y-px active:bg-[#b45309]',
+    'bg-botanical text-white shadow-[0_8px_20px_-8px_rgba(31,107,67,0.55)] ' +
+    'hover:bg-botanical-deep hover:shadow-[0_10px_26px_-8px_rgba(31,107,67,0.7)] ' +
+    'active:translate-y-px active:bg-botanical-deep',
   outline:
     'border border-hairline bg-surface text-ink ' +
     'hover:border-ink/25 hover:bg-offwhite active:translate-y-px active:bg-mist',

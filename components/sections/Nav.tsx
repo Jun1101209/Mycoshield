@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Menu, X, Hexagon } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { asset } from '@/lib/asset';
@@ -9,10 +9,10 @@ import { cn } from '@/lib/cn';
 
 // Home-anchored ("/#id") + base-path aware so the nav works from any route.
 const links = [
-  { href: '/#technology', label: 'Technology' },
+  { href: '/#signal', label: 'Technology' },
+  { href: '/#dashboard', label: 'Dashboard' },
   { href: '/#pellet', label: 'Myco-Pellet' },
-  { href: '/#platform', label: 'Platform' },
-  { href: '/#model', label: 'Impact Model' },
+  { href: '/#organizations', label: 'For Organizations' },
 ];
 
 export function Nav() {
@@ -31,26 +31,27 @@ export function Nav() {
       className={cn(
         'fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300',
         scrolled
-          ? 'border-hairline bg-surface/80 backdrop-blur-md'
-          : 'border-transparent bg-surface/0',
+          ? 'border-hairline bg-offwhite/85 backdrop-blur-md'
+          : 'border-transparent bg-offwhite/0',
       )}
     >
       <Container className="flex h-16 items-center justify-between">
         <a href={asset('/')} className="flex items-center gap-2.5" aria-label="MycoShield home">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink">
-            <Hexagon className="h-4 w-4 text-amber" strokeWidth={2.25} aria-hidden />
-          </span>
-          <span className="text-[15px] font-extrabold tracking-tight text-ink">
+          <span
+            className="h-2.5 w-2.5 rounded-full bg-signal shadow-[0_0_10px_rgba(155,203,91,0.9)] animate-pulse-dot"
+            aria-hidden
+          />
+          <span className="font-serif text-[17px] font-semibold tracking-tight text-ink">
             MycoShield
           </span>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-7 md:flex" aria-label="Primary">
           {links.map((link) => (
             <a
               key={link.href}
               href={asset(link.href)}
-              className="text-sm font-medium text-ink-muted transition-colors hover:text-ink"
+              className="text-sm font-medium text-ink-muted transition-colors hover:text-botanical"
             >
               {link.label}
             </a>
@@ -59,7 +60,7 @@ export function Nav() {
 
         <div className="hidden md:block">
           <Button as="a" href={asset('/#contact')} className="px-5">
-            Request Demo
+            Contact
           </Button>
         </div>
 
@@ -74,7 +75,7 @@ export function Nav() {
       </Container>
 
       {open && (
-        <div className="border-t border-hairline bg-surface md:hidden">
+        <div className="border-t border-hairline bg-offwhite md:hidden">
           <Container className="flex flex-col gap-1 py-4">
             {links.map((link) => (
               <a
@@ -92,7 +93,7 @@ export function Nav() {
               className="mt-2 w-full"
               onClick={() => setOpen(false)}
             >
-              Request Demo
+              Contact
             </Button>
           </Container>
         </div>
