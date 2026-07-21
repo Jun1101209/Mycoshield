@@ -17,7 +17,7 @@ export function Hero() {
       {/* soft engineered backdrop */}
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.5]" aria-hidden />
       <div
-        className="pointer-events-none absolute -top-32 right-[-10%] h-[520px] w-[520px] rounded-full bg-signal-soft blur-3xl"
+        className="pointer-events-none absolute -top-32 right-[-10%] h-[440px] w-[440px] rounded-full bg-signal-soft blur-2xl"
         aria-hidden
       />
       <div
