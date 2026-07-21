@@ -5,6 +5,8 @@ import { Card } from '@/components/ui/Card';
 import { DataChip } from '@/components/ui/DataChip';
 import { Badge } from '@/components/ui/Badge';
 import { Reveal } from '@/components/ui/Reveal';
+import { asset } from '@/lib/asset';
+import { cn } from '@/lib/cn';
 
 const scans = [
   {
@@ -29,10 +31,12 @@ const readouts = [
   { k: 'Priority restoration zones', v: '12', sub: 'flagged this week', tone: 'text-amber-deep' },
 ];
 
+// Positions are percentages within the Vietnam map image (309 × 647), so each
+// pin lands on its real region. `side` flips the label to keep it on the map.
 const riskZones = [
-  { top: '24%', left: '46%', tone: 'bg-amber-deep', label: 'Central Highlands' },
-  { top: '70%', left: '38%', tone: 'bg-alert', label: 'Mekong Delta' },
-  { top: '15%', left: '58%', tone: 'bg-botanical', label: 'Red River' },
+  { top: '13%', left: '48%', tone: 'bg-botanical', label: 'Red River', side: 'right' as const },
+  { top: '62%', left: '60%', tone: 'bg-amber-deep', label: 'Central Highlands', side: 'left' as const },
+  { top: '89%', left: '37%', tone: 'bg-alert', label: 'Mekong Delta', side: 'right' as const },
 ];
 
 export function DataLayer() {
@@ -104,47 +108,54 @@ export function DataLayer() {
 
               <div className="grid gap-0 sm:grid-cols-[1.3fr_1fr]">
                 {/* stylized satellite risk map */}
-                <div className="relative min-h-[280px] overflow-hidden border-b border-hairline bg-ink p-5 sm:border-b-0 sm:border-r">
+                <div className="relative min-h-[380px] overflow-hidden border-b border-hairline bg-ink p-5 sm:border-b-0 sm:border-r">
                   <div className="absolute inset-0 bg-grid-fine opacity-20" aria-hidden />
                   <div
                     className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-signal/30 to-transparent animate-scan"
                     aria-hidden
                   />
-                  <div className="relative font-mono text-[10px] uppercase tracking-[0.16em] text-white/50">
+                  <div className="relative z-10 font-mono text-[10px] uppercase tracking-[0.16em] text-white/50">
                     Vietnam satellite view · live soil risk
                   </div>
 
-                  <svg
-                    viewBox="0 0 200 300"
-                    className="absolute inset-0 mx-auto h-full w-full opacity-70"
-                    aria-hidden
-                    preserveAspectRatio="xMidYMid meet"
-                  >
-                    <path
-                      d="M118 22 C128 46 112 74 104 96 C96 118 120 132 116 156 C112 182 86 196 78 222 C70 248 92 266 78 284 C70 292 58 286 60 272 C64 244 82 232 86 208 C90 184 70 172 76 148 C82 122 104 112 108 88 C112 64 98 44 108 26 Z"
-                      fill="rgba(155,203,91,0.16)"
-                      stroke="rgba(155,203,91,0.5)"
-                      strokeWidth="1"
-                    />
-                  </svg>
+                  {/* Real Vietnam province map with pins on their true regions */}
+                  <div className="absolute inset-0 flex items-center justify-center px-6 pt-10 pb-5">
+                    <div className="relative h-full aspect-[309/647]">
+                      <div
+                        className="absolute inset-0 scale-125 rounded-full bg-signal/15 blur-2xl"
+                        aria-hidden
+                      />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={asset('/images/vietnam-map.png')}
+                        alt="Map of Vietnam highlighting live soil risk zones"
+                        className="absolute inset-0 h-full w-full object-contain opacity-90"
+                      />
 
-                  {riskZones.map((z) => (
-                    <div
-                      key={z.label}
-                      className="absolute flex items-center gap-1.5"
-                      style={{ top: z.top, left: z.left }}
-                    >
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span
-                          className={`absolute inline-flex h-full w-full animate-ping rounded-full ${z.tone} opacity-60`}
-                        />
-                        <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${z.tone}`} />
-                      </span>
-                      <span className="whitespace-nowrap font-mono text-[9px] uppercase tracking-wider text-white/70">
-                        {z.label}
-                      </span>
+                      {riskZones.map((z) => (
+                        <div
+                          key={z.label}
+                          className="absolute -translate-x-1/2 -translate-y-1/2"
+                          style={{ top: z.top, left: z.left }}
+                        >
+                          <span className="relative flex h-2.5 w-2.5">
+                            <span
+                              className={`absolute inline-flex h-full w-full animate-ping rounded-full ${z.tone} opacity-60`}
+                            />
+                            <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${z.tone}`} />
+                          </span>
+                          <span
+                            className={cn(
+                              'absolute top-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-[9px] uppercase tracking-wider text-white/80',
+                              z.side === 'left' ? 'right-full mr-2 text-right' : 'left-full ml-2',
+                            )}
+                          >
+                            {z.label}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
 
                 {/* readout panel */}
