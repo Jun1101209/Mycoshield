@@ -6,12 +6,34 @@ import {
   HeartHandshake,
   ScanLine,
   Package,
+  Satellite,
+  LineChart,
+  Microscope,
+  CornerRightDown,
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Reveal } from '@/components/ui/Reveal';
+
+const pillars = [
+  {
+    icon: Satellite,
+    title: 'Remote sensing fungal tracking',
+    body: 'AI models track underground biodiversity from satellite telemetry, aligned to the global soil-carbon registry framework.',
+  },
+  {
+    icon: LineChart,
+    title: 'Voluntary carbon markets',
+    body: 'We quantify Glomalin, a stable soil-carbon sink, to issue premium, verifiable soil carbon credits.',
+  },
+  {
+    icon: Microscope,
+    title: 'Premium soil consulting',
+    body: 'Lab analysis and site-specific restoration protocols that turn ESG targets into ground-truthed results.',
+  },
+];
 
 const engine = [
   { icon: Building2, label: 'Enterprise SaaS' },
@@ -26,22 +48,37 @@ const impact = [
 
 export function BusinessModel() {
   return (
-    <section id="model" className="scroll-mt-20 bg-offwhite py-24 sm:py-28">
+    <section id="organizations" className="scroll-mt-20 bg-offwhite py-24 sm:py-28">
       <Container>
         <SectionHeading
-          eyebrow="Cross-subsidization model"
-          title="Premium revenue funds free restoration at the frontline"
-          lede="One loop: profit from enterprise climate services underwrites the pellets and tools that reach smallholders at zero cost — before climate shock forces migration."
-          align="center"
+          eyebrow="For Organizations"
+          accent="green"
+          title="MycoShield Plus is built for scale"
+          lede="Agribusinesses, insurers, NGOs and ministries run the same system across whole regions: dashboards, bulk relief supply and carbon markets, in one loop."
         />
 
-        <div className="mx-auto mt-14 max-w-3xl space-y-4">
-          {/* Engine */}
+        {/* Commercial pillars */}
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {pillars.map((pillar, i) => (
+            <Reveal key={pillar.title} delay={i * 0.06}>
+              <Card interactive className="h-full p-6">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-botanical-soft/50">
+                  <pillar.icon className="h-5 w-5 text-botanical" strokeWidth={1.75} aria-hidden />
+                </span>
+                <h3 className="mt-5 text-base font-bold text-ink">{pillar.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{pillar.body}</p>
+              </Card>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* Cross-subsidy loop */}
+        <div className="mx-auto mt-8 max-w-3xl space-y-4">
           <Reveal>
             <Card className="p-6">
               <div className="mb-5 flex items-center justify-between">
                 <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-amber-deep">
-                  The engine — premium revenue
+                  The engine · premium revenue
                 </div>
                 <Badge tone="amber">Commercial</Badge>
               </div>
@@ -59,22 +96,18 @@ export function BusinessModel() {
             </Card>
           </Reveal>
 
-          {/* connector */}
           <Reveal delay={0.05}>
             <div className="flex flex-col items-center gap-1 py-1 text-ink-muted">
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em]">
-                directly funds
-              </span>
-              <ArrowDown className="h-5 w-5 text-amber-deep" strokeWidth={2.25} aria-hidden />
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em]">directly funds</span>
+              <ArrowDown className="h-5 w-5 text-botanical" strokeWidth={2.25} aria-hidden />
             </div>
           </Reveal>
 
-          {/* Impact */}
           <Reveal delay={0.1}>
             <Card className="border-botanical/25 p-6">
               <div className="mb-5 flex items-center justify-between">
                 <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-botanical">
-                  The impact — $0 cost basis
+                  The impact · $0 to farmers
                 </div>
                 <Badge tone="botanical">
                   <HeartHandshake className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
@@ -93,11 +126,17 @@ export function BusinessModel() {
                 ))}
               </div>
               <p className="mt-4 text-sm leading-relaxed text-ink-muted">
-                Distributed to smallholder farming cooperatives directly impacted by
-                catastrophic climate shock — preventing climate-forced migration and
-                rebuilding food security where it is most fragile.
+                Delivered free to smallholder cooperatives hit by climate shock, rebuilding
+                food security before the damage forces migration.
               </p>
             </Card>
+          </Reveal>
+
+          <Reveal delay={0.12}>
+            <p className="flex items-center justify-center gap-2 pt-2 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
+              <CornerRightDown className="h-4 w-4 text-botanical" strokeWidth={2} aria-hidden />
+              Ask Farmer An in the corner for the full picture
+            </p>
           </Reveal>
         </div>
       </Container>

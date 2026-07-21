@@ -1,9 +1,15 @@
-import { ArrowRight, FileText, Satellite } from 'lucide-react';
+import { ArrowRight, Satellite } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { DataChip } from '@/components/ui/DataChip';
 import { ImageSlot } from '@/components/ui/ImageSlot';
 import { Reveal } from '@/components/ui/Reveal';
+
+const stats = [
+  { v: '97%', l: 'Root attachment' },
+  { v: '3×', l: 'Faster recovery' },
+  { v: '$0', l: 'To smallholders' },
+];
 
 export function Hero() {
   return (
@@ -11,7 +17,7 @@ export function Hero() {
       {/* soft engineered backdrop */}
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.5]" aria-hidden />
       <div
-        className="pointer-events-none absolute -top-32 right-[-10%] h-[520px] w-[520px] rounded-full bg-amber-soft/40 blur-3xl"
+        className="pointer-events-none absolute -top-32 right-[-10%] h-[520px] w-[520px] rounded-full bg-signal-soft blur-3xl"
         aria-hidden
       />
       <div
@@ -31,43 +37,39 @@ export function Hero() {
             </Reveal>
 
             <Reveal delay={0.05}>
-              <h1 className="text-[clamp(2.25rem,5.2vw,4rem)] font-extrabold leading-[1.04] tracking-tight text-ink">
-                Rebuilding living ecosystems after climate{' '}
-                <span className="text-amber-deep">extreme events</span>.
+              <h1 className="text-[clamp(2.35rem,5.4vw,4.15rem)] leading-[1.05]">
+                The rice field looks alive.{' '}
+                <em className="font-normal italic text-botanical">
+                  Underground, the network is already breaking.
+                </em>
               </h1>
             </Reveal>
 
             <Reveal delay={0.1}>
               <p className="mt-6 text-lg leading-relaxed text-ink-body">
-                MycoShield deploys smart bio-materials and data-driven Arbuscular
-                Mycorrhizal Fungi (AMF) to reverse post-disaster soil clinical
-                infertility — safeguarding global agricultural security from the
-                ground up.
+                After floods, storms and salt intrusion, mycorrhizal fungi collapse
+                days before the crop shows it. MycoShield reads that invisible signal
+                from orbit and from the soil, then ships the fix.
               </p>
             </Reveal>
 
             <Reveal delay={0.15}>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Button as="a" href="#contact">
-                  Request Enterprise Demo
+                <Button as="a" href="#signal">
+                  See how the scan works
                   <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
                 </Button>
-                <Button as="a" href="#pellet" variant="outline">
-                  <FileText className="h-4 w-4" strokeWidth={2} aria-hidden />
-                  View Scientific Data Sheet
+                <Button as="a" href="#contact" variant="outline">
+                  Request a soil audit
                 </Button>
               </div>
             </Reveal>
 
             <Reveal delay={0.2}>
               <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-hairline pt-6">
-                {[
-                  { v: '97%', l: 'Root attachment' },
-                  { v: '3×', l: 'Faster recovery' },
-                  { v: '$0', l: 'To smallholders' },
-                ].map((s) => (
+                {stats.map((s) => (
                   <div key={s.l}>
-                    <dt className="text-2xl font-extrabold tracking-tight text-ink">
+                    <dt className="font-serif text-3xl font-semibold tracking-tight text-ink">
                       {s.v}
                     </dt>
                     <dd className="mt-1 text-xs text-ink-muted">{s.l}</dd>
@@ -82,11 +84,11 @@ export function Hero() {
             <div className="relative">
               <ImageSlot
                 src="/images/hero-field.jpg"
-                alt="Bright, naturally lit crop field under restoration monitoring"
+                alt="Bright rice field under restoration monitoring"
                 ratio="4 / 5"
                 label="hero-field.jpg"
                 className="shadow-lift ring-1 ring-hairline"
-                gradient="from-botanical/30 via-emerald-600/15 to-amber/25"
+                gradient="from-botanical/30 via-signal/20 to-amber/25"
                 overlay={
                   <>
                     <div
@@ -108,7 +110,7 @@ export function Hero() {
                   <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
                     NDVI Δ
                   </div>
-                  <div className="mt-0.5 text-xl font-bold text-red-600">−0.34</div>
+                  <div className="mt-0.5 text-xl font-bold text-alert">−0.34</div>
                 </div>
               </div>
 

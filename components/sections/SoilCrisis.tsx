@@ -9,41 +9,42 @@ const steps = [
   {
     icon: CloudLightning,
     step: 'Trigger',
-    title: 'Extreme weather disasters',
-    body: 'Floods, storms, and salt intrusion physically shear the soil profile in days.',
+    title: 'Extreme weather',
+    body: 'Floods, storms and salt intrusion shear the soil profile in days.',
     tone: 'neutral' as const,
   },
   {
     icon: Network,
     step: 'Collapse',
-    title: 'Up to 85% of AMF networks destroyed',
-    body: 'The underground mycorrhizal web that governs water and nutrient flow is severed.',
+    title: 'Up to 85% of fungal networks lost',
+    body: 'The web that moves water and nutrients underground is severed.',
     tone: 'alert' as const,
   },
   {
     icon: HeartCrack,
     step: 'Symptom',
     title: 'Clinical soil infertility',
-    body: 'Surface looks intact while the biological engine below has gone silent.',
+    body: 'The surface looks intact while the biology below goes silent.',
     tone: 'alert' as const,
   },
   {
     icon: Ban,
     step: 'Outcome',
-    title: 'Total resowing failure',
-    body: 'Replanted crops cannot re-establish symbiosis — yields fail repeatedly.',
+    title: 'Resowing fails',
+    body: 'Replanted crops cannot rebuild symbiosis, so yields fail again.',
     tone: 'alert' as const,
   },
 ];
 
 export function SoilCrisis() {
   return (
-    <section id="technology" className="scroll-mt-20 bg-surface py-24 sm:py-28">
+    <section id="crisis" className="scroll-mt-20 bg-surface py-24 sm:py-28">
       <Container>
         <SectionHeading
           eyebrow="The invisible crisis"
-          title="An ecological disaster that surface metrics never see"
-          lede="Long before a field looks stressed, the living network beneath it has already broken. The damage cascades underground — silently."
+          accent="ochre"
+          title="The field looks fine. The engine beneath it has gone quiet."
+          lede="Long before a crop looks stressed, the living network under it has already broken. The damage runs underground, in silence."
         />
 
         <div className="mt-14 grid gap-4 lg:grid-cols-4">
@@ -73,11 +74,11 @@ export function SoilCrisis() {
                 </div>
               </div>
               <p className="px-6 py-5 text-[15px] leading-relaxed text-ink-body">
-                AMF are <strong className="font-semibold text-ink">obligate biotrophs</strong> —
-                they cannot complete their life cycle without direct symbiosis with a living
-                root. That single constraint makes them impossible to mass-produce through
-                conventional industrial fermentation, creating an insurmountable market gap
-                that MycoShield's living-carrier bio-materials are engineered to close.
+                These fungi are{' '}
+                <strong className="font-semibold text-ink">obligate biotrophs</strong>. They
+                cannot complete their life cycle without a living root, which makes them
+                impossible to mass-produce through conventional fermentation. MycoShield&rsquo;s
+                living-carrier pellets are engineered to close exactly that gap.
               </p>
             </div>
           </Card>

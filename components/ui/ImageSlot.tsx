@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ImageIcon } from 'lucide-react';
 import { asset } from '@/lib/asset';
 import { cn } from '@/lib/cn';
@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn';
 /**
  * Aspect-ratio-locked image container with a gradient placeholder underneath.
  * If the file is missing (user hasn't dropped it in yet) the placeholder + a
- * quiet label stay visible — the reserved box means zero layout shift either way.
+ * quiet label stays visible, so the reserved box means zero layout shift either way.
  */
 export function ImageSlot({
   src,
@@ -30,6 +30,15 @@ export function ImageSlot({
   rounded?: string;
 }) {
   const [ok, setOk] = useState(true);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // A 404 can fire the img's error before React attaches onError (notably on a
+  // static export, pre-hydration), which would leave the broken-image alt text
+  // showing. Re-check the decoded size on mount so the placeholder still wins.
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth === 0) setOk(false);
+  }, []);
 
   return (
     <div
@@ -45,6 +54,7 @@ export function ImageSlot({
       {ok ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
+          ref={imgRef}
           src={asset(src)}
           alt={alt}
           loading="lazy"

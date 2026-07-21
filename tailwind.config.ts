@@ -1,8 +1,10 @@
 import type { Config } from 'tailwindcss';
 
 /**
- * The "BeeHero" matrix: ~80% white/off-white surfaces, high-contrast slate ink,
- * and a disciplined accent budget (marigold-amber + deep botanical green).
+ * "Mycelium Signal" — a light, warm-paper palette for an environmental biotech
+ * brand. Deep pine ink on warm paper, a confident botanical green as primary,
+ * a living lime "signal" for data/tech accents, and a restrained ochre for
+ * warmth. Natural first, quietly technical, never gaudy.
  */
 const config: Config = {
   content: [
@@ -13,28 +15,41 @@ const config: Config = {
     extend: {
       colors: {
         // Surfaces
-        surface: '#FFFFFF',
-        offwhite: '#F8F9FA',
-        mist: '#F1F5F9',
+        surface: '#FFFFFF', // elevated cards
+        offwhite: '#FAFAF7', // warm paper page background
+        mist: '#EFF1EA', // soft sage tint
         // Ink
-        ink: '#0F172A',
-        'ink-body': '#1E293B',
-        'ink-muted': '#64748B',
+        ink: '#13241C', // pine near-black (display headings)
+        'ink-body': '#3A4A41', // muted deep sage for body
+        'ink-muted': '#6B7A6F', // sage gray for secondary text
         // Structure
-        hairline: '#E2E8F0',
-        // Accents (used sparingly, <=20% of the page)
-        amber: {
-          DEFAULT: '#EAB308',
-          deep: '#D97706',
-          soft: '#FEF3C7',
-        },
+        hairline: '#E4E5DB',
+        // Primary — botanical green
         botanical: {
-          DEFAULT: '#14532D',
-          deep: '#0F5132',
-          soft: '#DCFCE7',
+          DEFAULT: '#1F6B43',
+          deep: '#175434',
+          soft: '#E4F0E4',
+        },
+        // Living "signal" lime — the data/tech pop, used sparingly
+        signal: {
+          DEFAULT: '#9BCB5B',
+          deep: '#6FA23A',
+          soft: '#EDF4DF',
+        },
+        // Warm ochre accent (kept under the old "amber" name to reuse tokens)
+        amber: {
+          DEFAULT: '#C6902F',
+          deep: '#A9791F',
+          soft: '#F6EDD6',
+        },
+        // Terracotta alert
+        alert: {
+          DEFAULT: '#C25A44',
+          soft: '#F7E6E0',
         },
       },
       fontFamily: {
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
@@ -42,23 +57,37 @@ const config: Config = {
         content: '72rem',
       },
       boxShadow: {
-        card: '0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.10)',
-        'card-hover': '0 2px 4px rgba(15, 23, 42, 0.05), 0 16px 40px -16px rgba(15, 23, 42, 0.18)',
-        lift: '0 24px 60px -24px rgba(15, 23, 42, 0.22)',
+        card: '0 1px 2px rgba(19, 36, 28, 0.04), 0 10px 30px -14px rgba(19, 36, 28, 0.14)',
+        'card-hover': '0 2px 4px rgba(19, 36, 28, 0.05), 0 18px 44px -18px rgba(19, 36, 28, 0.22)',
+        lift: '0 28px 64px -26px rgba(19, 36, 28, 0.28)',
       },
       keyframes: {
         'pulse-dot': {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.35' },
         },
-        'scan': {
+        scan: {
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(1100%)' },
+        },
+        'spin-slow': {
+          to: { transform: 'rotate(360deg)' },
+        },
+        'spore-drift': {
+          '0%, 100%': { transform: 'translate(0, 0)', opacity: '0.35' },
+          '50%': { transform: 'translate(4px, -6px)', opacity: '1' },
+        },
+        bob: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-6px)' },
         },
       },
       animation: {
         'pulse-dot': 'pulse-dot 2.4s ease-in-out infinite',
-        'scan': 'scan 4s linear infinite',
+        scan: 'scan 4s linear infinite',
+        'spin-slow': 'spin-slow 26s linear infinite',
+        'spore-drift': 'spore-drift 5s ease-in-out infinite',
+        bob: 'bob 4s ease-in-out infinite',
       },
     },
   },

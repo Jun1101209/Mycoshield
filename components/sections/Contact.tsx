@@ -1,4 +1,4 @@
-import { ArrowRight, Mail } from 'lucide-react';
+import { ArrowRight, Mail, Phone } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
@@ -17,7 +17,7 @@ export function Contact() {
                 ratio="16 / 9"
                 rounded="rounded-none"
                 className="h-full w-full"
-                gradient="from-botanical/40 via-emerald-800/30 to-ink"
+                gradient="from-botanical/50 via-botanical-deep/40 to-ink"
               />
             </div>
             <div
@@ -26,32 +26,39 @@ export function Contact() {
             />
 
             <div className="relative max-w-2xl">
-              <div className="mb-4 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-amber">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber animate-pulse-dot" aria-hidden />
+              <div className="mb-4 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-signal">
+                <span className="h-1.5 w-1.5 rounded-full bg-signal animate-pulse-dot" aria-hidden />
                 Partner with MycoShield
               </div>
-              <h2 className="text-[clamp(1.75rem,4vw,2.75rem)] font-extrabold leading-tight text-white">
-                Ready to restore soil functionality at scale?
+              <h2 className="text-[clamp(1.9rem,4vw,2.9rem)] leading-tight text-white">
+                Ready to see what is happening under your fields?
               </h2>
               <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/70">
-                Book an enterprise demo to see live soil-risk telemetry for your region,
-                or request a site-specific restoration protocol from our science team.
+                Book a soil audit for your region, or request a site-specific restoration
+                protocol from our team. We reply within two working days.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button as="a" href="mailto:partners@mycoshield.io">
-                  Request Enterprise Demo
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Button as="a" href="mailto:habisbabi.contactforwork@gmail.com">
+                  Email the team
                   <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
                 </Button>
                 <Button
                   as="a"
-                  href="mailto:partners@mycoshield.io"
+                  href="mailto:habisbabi.contactforwork@gmail.com"
                   variant="outline"
                   className="border-white/20 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
                 >
                   <Mail className="h-4 w-4" strokeWidth={2} aria-hidden />
-                  partners@mycoshield.io
+                  habisbabi.contactforwork@gmail.com
                 </Button>
               </div>
+              <a
+                href="tel:+61408373875"
+                className="mt-5 inline-flex items-center gap-2 font-mono text-sm text-white/60 transition-colors hover:text-signal"
+              >
+                <Phone className="h-4 w-4" strokeWidth={2} aria-hidden />
+                +61 408 373 875
+              </a>
             </div>
           </div>
         </Reveal>
