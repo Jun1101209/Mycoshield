@@ -19,6 +19,13 @@ type ScrollScrubVideoProps = {
   /** Small mono label pinned in the corner. */
   label?: string;
   /**
+   * External scroll progress (0→1) that drives the playhead. Supply this when a
+   * parent pins the frame and scrubs it with a scoped scroll gesture. When
+   * omitted, the component derives its own progress from the frame transiting
+   * the viewport (the standard, non-pinned behaviour).
+   */
+  progress?: MotionValue<number>;
+  /**
    * Rendered instead of the video when the file is missing / fails to load, or
    * when the visitor prefers reduced motion. Receives the same scroll progress
    * MotionValue (0→1) so the fallback can animate with the identical gesture.
@@ -44,6 +51,7 @@ export function ScrollScrubVideo({
   className,
   ratio = '1 / 1',
   label = 'Myco-Pellet · 3D turntable',
+  progress,
   fallback,
 }: ScrollScrubVideoProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -61,9 +69,12 @@ export function ScrollScrubVideo({
     target: containerRef,
     offset: ['start end', 'end start'],
   });
+  // A pinning parent can hand us a scoped progress value; otherwise scrub off
+  // the frame's own transit through the viewport.
+  const scrub = progress ?? scrollYProgress;
 
   // Translate scroll progress into a target playhead; the rAF loop chases it.
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+  useMotionValueEvent(scrub, 'change', (v) => {
     const video = videoRef.current;
     if (!video || Number.isNaN(video.duration)) return;
     targetTime.current = clamp(v, 0, 1) * video.duration;
@@ -76,7 +87,7 @@ export function ScrollScrubVideo({
 
     // Seed the playhead from the current scroll position on mount.
     if (!Number.isNaN(video.duration)) {
-      targetTime.current = clamp(scrollYProgress.get(), 0, 1) * video.duration;
+      targetTime.current = clamp(scrub.get(), 0, 1) * video.duration;
     }
 
     const tick = () => {
@@ -93,7 +104,7 @@ export function ScrollScrubVideo({
     return () => {
       if (rafId.current != null) cancelAnimationFrame(rafId.current);
     };
-  }, [reduce, failed, ready, scrollYProgress]);
+  }, [reduce, failed, ready, scrub]);
 
   // Only load the video once the section nears the viewport. Off-screen,
   // Chromium defers a preload="auto" video and parks it at NETWORK_NO_SOURCE —
@@ -197,7 +208,7 @@ export function ScrollScrubVideo({
           <source src={asset(src)} type="video/mp4" />
         </video>
       ) : (
-        fallback?.(scrollYProgress)
+        fallback?.(scrub)
       )}
 
       {label && (

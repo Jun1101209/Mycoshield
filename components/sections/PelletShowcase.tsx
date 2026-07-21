@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { MotionValue } from 'framer-motion';
-import { motion, useTransform, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import {
   Shield,
   Droplets,
@@ -62,9 +62,42 @@ const layers = [
   },
 ];
 
+/**
+ * `true` once the viewport is wide enough (≥ lg) for the pinned scroll-scrub to
+ * feel good. Below that we skip pinning — a phone can't spare a full extra
+ * screen of scroll-jacking, and the two columns stack tall past the viewport.
+ */
+function useDesktopViewport() {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return isDesktop;
+}
+
 function Anatomy() {
-  return (
-    <div className="grid items-center gap-8 lg:grid-cols-2">
+  const reduce = useReducedMotion();
+  const isDesktop = useDesktopViewport();
+  // Pin + scope the scroll only on desktop with motion allowed; otherwise the
+  // pellet still rotates, but off the frame's ordinary transit through the page.
+  const pinned = isDesktop && !reduce;
+
+  // A tall track behind a sticky viewport: while the sticky frame is pinned,
+  // 0→1 progress is spent rotating the pellet. Only when the track scrolls out
+  // does the page move on — so the up/down gesture belongs to this section, not
+  // the whole page, exactly until the turntable finishes.
+  const trackRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ['start start', 'end end'],
+  });
+
+  const content = (
+    <div className="grid w-full items-center gap-8 lg:grid-cols-2">
       {/* Scroll-scrubbed 3D turntable of the pellet (Blender render). Until the
           video file is dropped into /public/media, the cross-section schematic
           below stands in — and it turns with the same scroll gesture, so the
@@ -74,6 +107,7 @@ function Anatomy() {
         poster="/media/myco-pellet-poster.jpg"
         ratio="4 / 5"
         label="Myco-Pellet · 3D turntable"
+        progress={pinned ? scrollYProgress : undefined}
         fallback={(progress) => <PelletSchematic progress={progress} />}
       />
 
@@ -99,6 +133,20 @@ function Anatomy() {
           <Badge tone="botanical">Circular economy</Badge>
           <Badge tone="neutral">100% agri-waste derived</Badge>
         </div>
+      </div>
+    </div>
+  );
+
+  // The DOM shape is identical whether pinned or not (same two nested divs), so
+  // toggling `pinned` never remounts the video and drops its decoded frames.
+  return (
+    <div ref={trackRef} className={pinned ? 'relative h-[220vh]' : undefined}>
+      <div
+        className={
+          pinned ? 'sticky top-0 flex min-h-screen items-center py-16' : undefined
+        }
+      >
+        {content}
       </div>
     </div>
   );
