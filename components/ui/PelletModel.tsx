@@ -39,20 +39,15 @@ export function PelletModel({
 
   const showVideo = !reduce && !videoFailed;
 
-  // Play only while actually on screen; pause otherwise. Slowing playback a
-  // touch means the decoder handles fewer frames per second, which keeps a
-  // high-bitrate clip smooth without re-encoding it. play() on a muted video
-  // also kicks off the fetch, so preload can stay "none" until then.
+  // Play at normal speed only while actually on screen; pause otherwise. play()
+  // on a muted video also kicks off the fetch, so preload can stay "none" until
+  // then, and it stays on its own GPU layer so it composites cheaply.
   useEffect(() => {
     if (!showVideo) return;
     const el = wrapRef.current;
     const video = videoRef.current;
     if (!el || !video) return;
-    video.playbackRate = 0.7;
-    const play = () => {
-      video.playbackRate = 0.7;
-      video.play?.().catch(() => {});
-    };
+    const play = () => video.play?.().catch(() => {});
     if (typeof IntersectionObserver === 'undefined') {
       play();
       return;
