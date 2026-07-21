@@ -1,38 +1,45 @@
-import { CloudLightning, Network, HeartCrack, Ban, ArrowRight, Microscope } from 'lucide-react';
+import { CloudLightning, Network, HeartCrack, Ban, Microscope } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { FlowNode } from '@/components/ui/FlowNode';
 import { Reveal } from '@/components/ui/Reveal';
-import { Card } from '@/components/ui/Card';
+import { cn } from '@/lib/cn';
 
-const steps = [
+type Step = {
+  icon: LucideIcon;
+  stage: string;
+  title: string;
+  body: string;
+  danger?: boolean;
+};
+
+const steps: Step[] = [
   {
     icon: CloudLightning,
-    step: 'Trigger',
+    stage: 'Trigger',
     title: 'Extreme weather',
     body: 'Floods, storms and salt intrusion shear the soil profile in days.',
-    tone: 'neutral' as const,
   },
   {
     icon: Network,
-    step: 'Collapse',
+    stage: 'Collapse',
     title: 'Up to 85% of fungal networks lost',
     body: 'The web that moves water and nutrients underground is severed.',
-    tone: 'alert' as const,
+    danger: true,
   },
   {
     icon: HeartCrack,
-    step: 'Symptom',
+    stage: 'Symptom',
     title: 'Clinical soil infertility',
     body: 'The surface looks intact while the biology below goes silent.',
-    tone: 'alert' as const,
+    danger: true,
   },
   {
     icon: Ban,
-    step: 'Outcome',
+    stage: 'Outcome',
     title: 'Resowing fails',
     body: 'Replanted crops cannot rebuild symbiosis, so yields fail again.',
-    tone: 'alert' as const,
+    danger: true,
   },
 ];
 
@@ -41,48 +48,71 @@ export function SoilCrisis() {
     <section id="crisis" className="scroll-mt-20 bg-surface py-24 sm:py-28">
       <Container>
         <SectionHeading
+          index="01"
           eyebrow="The invisible crisis"
           accent="ochre"
           title="The field looks fine. The engine beneath it has gone quiet."
           lede="Long before a crop looks stressed, the living network under it has already broken. The damage runs underground, in silence."
         />
 
-        <div className="mt-14 grid gap-4 lg:grid-cols-4">
-          {steps.map((step, i) => (
-            <Reveal key={step.title} delay={i * 0.07} className="relative">
-              <FlowNode {...step} />
-              {i < steps.length - 1 && (
-                <ArrowRight
-                  className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-hairline lg:block"
-                  strokeWidth={2}
+        <div className="mt-14 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+          {/* Vertical cascade — the collapse moving downward */}
+          <ol className="relative ml-1.5">
+            <span
+              className="absolute left-[7px] top-2 bottom-6 w-px bg-hairline"
+              aria-hidden
+            />
+            {steps.map((s, i) => (
+              <Reveal as="li" key={s.title} delay={i * 0.07} className="relative pb-9 pl-10 last:pb-0">
+                <span
+                  className={cn(
+                    'absolute left-0 top-1 h-3.5 w-3.5 rounded-full ring-4 ring-surface',
+                    s.danger ? 'bg-alert' : 'bg-ink-muted',
+                  )}
                   aria-hidden
                 />
-              )}
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.1}>
-          <Card className="mt-8 overflow-hidden">
-            <div className="grid gap-0 md:grid-cols-[auto_1fr]">
-              <div className="flex items-center gap-4 border-b border-hairline bg-offwhite px-6 py-5 md:border-b-0 md:border-r">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-botanical-soft/60">
-                  <Microscope className="h-5 w-5 text-botanical" strokeWidth={1.75} aria-hidden />
-                </span>
-                <div className="font-mono text-xs uppercase tracking-[0.14em] text-botanical">
-                  The biological bottleneck
+                <div className="flex items-center gap-2">
+                  <s.icon
+                    className={cn('h-4 w-4', s.danger ? 'text-alert' : 'text-ink-muted')}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                  <span
+                    className={cn(
+                      'font-mono text-[11px] uppercase tracking-[0.16em]',
+                      s.danger ? 'text-alert' : 'text-ink-muted',
+                    )}
+                  >
+                    {s.stage}
+                  </span>
                 </div>
+                <h3 className="mt-1.5 text-lg font-bold leading-snug text-ink">{s.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{s.body}</p>
+              </Reveal>
+            ))}
+          </ol>
+
+          {/* Emphasised aside — the reason it can't be fixed the easy way */}
+          <Reveal delay={0.1} className="lg:sticky lg:top-28">
+            <div className="rounded-2xl border border-botanical/20 bg-botanical-soft/40 p-7">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-surface shadow-card">
+                <Microscope className="h-5 w-5 text-botanical" strokeWidth={1.75} aria-hidden />
+              </span>
+              <div className="mt-5 font-mono text-xs uppercase tracking-[0.14em] text-botanical">
+                The biological bottleneck
               </div>
-              <p className="px-6 py-5 text-[15px] leading-relaxed text-ink-body">
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-body">
                 These fungi are{' '}
-                <strong className="font-semibold text-ink">obligate biotrophs</strong>. They
-                cannot complete their life cycle without a living root, which makes them
-                impossible to mass-produce through conventional fermentation. MycoShield&rsquo;s
-                living-carrier pellets are engineered to close exactly that gap.
+                <strong className="font-semibold text-ink">obligate biotrophs</strong>. They cannot
+                complete their life cycle without a living root, which makes them impossible to
+                mass-produce through conventional fermentation.
+              </p>
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-body">
+                MycoShield&rsquo;s living-carrier pellets are engineered to close exactly that gap.
               </p>
             </div>
-          </Card>
-        </Reveal>
+          </Reveal>
+        </div>
       </Container>
     </section>
   );

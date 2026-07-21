@@ -1,7 +1,6 @@
 import { Droplets, Sprout, Timer, FlaskConical } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
-import { Card } from '@/components/ui/Card';
 import { MetricCounter } from '@/components/ui/MetricCounter';
 import { Reveal } from '@/components/ui/Reveal';
 
@@ -12,48 +11,33 @@ type Metric = {
 };
 
 const metrics: Metric[] = [
-  {
-    value: '45–62%',
-    label: 'Higher salinity and drought tolerance',
-    icon: Droplets,
-  },
-  {
-    value: '97%',
-    label: 'Seedling survival and root attachment',
-    icon: Sprout,
-  },
-  {
-    value: '3×',
-    label: 'Faster soil recovery, 18 months down to under 6',
-    icon: Timer,
-  },
-  {
-    value: '35–50%',
-    label: 'Better phosphorus and micronutrient uptake',
-    icon: FlaskConical,
-  },
+  { value: '45–62%', label: 'Higher salinity and drought tolerance', icon: Droplets },
+  { value: '97%', label: 'Seedling survival and root attachment', icon: Sprout },
+  { value: '3×', label: 'Faster soil recovery, 18 months to under 6', icon: Timer },
+  { value: '35–50%', label: 'Better phosphorus and micronutrient uptake', icon: FlaskConical },
 ];
 
 export function Metrics() {
   return (
-    <section className="border-y border-hairline bg-offwhite py-16 sm:py-20">
+    <section className="bg-ink py-16 sm:py-20">
       <Container>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Reveal>
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-signal">
+            <span className="h-1.5 w-1.5 rounded-full bg-signal animate-pulse-dot" aria-hidden />
+            Proven in the field
+          </div>
+        </Reveal>
+
+        <div className="mt-8 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
           {metrics.map((metric, i) => (
             <Reveal key={metric.label} delay={i * 0.06}>
-              <Card className="h-full p-6">
-                <metric.icon
-                  className="h-6 w-6 text-amber-deep"
-                  strokeWidth={1.75}
-                  aria-hidden
-                />
-                <div className="mt-5 text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-none tracking-tight text-ink">
+              <div className="border-l border-white/15 pl-5">
+                <metric.icon className="h-5 w-5 text-signal" strokeWidth={1.75} aria-hidden />
+                <div className="mt-4 font-serif text-[clamp(2.25rem,4.5vw,3.25rem)] font-semibold leading-none tracking-tight text-white">
                   <MetricCounter value={metric.value} />
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-                  {metric.label}
-                </p>
-              </Card>
+                <p className="mt-3 text-sm leading-relaxed text-white/55">{metric.label}</p>
+              </div>
             </Reveal>
           ))}
         </div>

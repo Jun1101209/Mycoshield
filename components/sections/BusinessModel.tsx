@@ -51,6 +51,7 @@ export function BusinessModel() {
     <section id="organizations" className="scroll-mt-20 bg-offwhite py-24 sm:py-28">
       <Container>
         <SectionHeading
+          index="04"
           eyebrow="For Organizations"
           accent="green"
           title="MycoShield Plus is built for scale"

@@ -40,7 +40,8 @@ export function DataLayer() {
     <section id="signal" className="scroll-mt-20 bg-offwhite py-24 sm:py-28">
       <Container>
         <SectionHeading
-          eyebrow="Layer 01 · Orbit"
+          index="02"
+          eyebrow="Orbit"
           accent="signal"
           title="Two satellites read what the eye can’t"
           lede="Long before a field looks stressed, its light and its radar echo have already shifted. MycoShield fuses two public constellations to catch that first signal."
@@ -78,7 +79,7 @@ export function DataLayer() {
         {/* Layer 02 · Fusion */}
         <div id="dashboard" className="mt-20 scroll-mt-24">
           <SectionHeading
-            eyebrow="Layer 02 · Fusion"
+            eyebrow="Fusion"
             accent="green"
             title="Vietnam, mapped from sky, radar and soil"
             lede="A self-supervised model cross-references optical scans and radar structure against soil biology, turning indirect surface readings into a live, nationwide map of what is happening below the field."
