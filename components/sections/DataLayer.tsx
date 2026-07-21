@@ -3,10 +3,8 @@ import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Card } from '@/components/ui/Card';
 import { DataChip } from '@/components/ui/DataChip';
-import { Badge } from '@/components/ui/Badge';
 import { Reveal } from '@/components/ui/Reveal';
 import { asset } from '@/lib/asset';
-import { cn } from '@/lib/cn';
 
 const scans = [
   {
@@ -31,12 +29,27 @@ const readouts = [
   { k: 'Priority restoration zones', v: '12', sub: 'flagged this week', tone: 'text-amber-deep' },
 ];
 
-// Positions are percentages within the Vietnam map image (309 × 647), so each
-// pin lands on its real region. `side` flips the label to keep it on the map.
-const riskZones = [
-  { top: '13%', left: '48%', tone: 'bg-botanical', label: 'Red River', side: 'right' as const },
-  { top: '62%', left: '60%', tone: 'bg-amber-deep', label: 'Central Highlands', side: 'left' as const },
-  { top: '89%', left: '37%', tone: 'bg-alert', label: 'Mekong Delta', side: 'right' as const },
+// Coordinates are percentages of the 16:10 map stage (see the panel below), so
+// the dot sits on its real region and a leader line reaches a label on the
+// right. `dot` = pin, `line` = where the connector ends, `lab` = label anchor.
+type Pin = {
+  label: string;
+  color: string;
+  dot: [number, number];
+  line: [number, number];
+  lab: [number, number];
+};
+
+const pins: Pin[] = [
+  { label: 'Northern farms', color: '#C6902F', dot: [15.9, 16.7], line: [40, 13], lab: [41, 13] },
+  { label: 'Central coast', color: '#C6902F', dot: [18.1, 42.8], line: [44, 39], lab: [45, 39] },
+  { label: 'Mekong Delta', color: '#C25A44', dot: [14.3, 82.4], line: [38, 78], lab: [39, 78] },
+];
+
+const legend = [
+  { color: '#5F9142', label: 'Healthy AM network' },
+  { color: '#C6902F', label: 'Ecological stress · salinity' },
+  { color: '#C25A44', label: 'Total fungal collapse' },
 ];
 
 export function DataLayer() {
@@ -106,75 +119,117 @@ export function DataLayer() {
                 </DataChip>
               </div>
 
-              <div className="grid gap-0 sm:grid-cols-[1.3fr_1fr]">
-                {/* stylized satellite risk map */}
-                <div className="relative min-h-[380px] overflow-hidden border-b border-hairline bg-ink p-5 sm:border-b-0 sm:border-r">
-                  <div className="absolute inset-0 bg-grid-fine opacity-20" aria-hidden />
-                  <div
-                    className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-signal/30 to-transparent animate-scan"
+              {/* Satellite risk map panel (light) */}
+              <div className="relative border-b border-hairline bg-[#EEF2E8] px-5 py-6 sm:px-7">
+                <div className="inline-flex items-center gap-2 rounded-md border border-hairline bg-surface/80 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-muted">
+                  Vietnam satellite view · live soil risk
+                </div>
+
+                {/* Fixed 16:10 stage keeps the dots, leader lines and labels aligned */}
+                <div className="relative mx-auto mt-5 aspect-[16/10] w-full max-w-[620px]">
+                  {/* leader lines */}
+                  <svg
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    className="absolute inset-0 h-full w-full"
                     aria-hidden
-                  />
-                  <div className="relative z-10 font-mono text-[10px] uppercase tracking-[0.16em] text-white/50">
-                    Vietnam satellite view · live soil risk
+                  >
+                    {pins.map((p) => (
+                      <g key={p.label}>
+                        <line
+                          x1={p.dot[0]}
+                          y1={p.dot[1]}
+                          x2={p.line[0]}
+                          y2={p.line[1]}
+                          stroke="rgba(19,36,28,0.35)"
+                          strokeWidth="0.35"
+                        />
+                        <circle cx={p.line[0]} cy={p.line[1]} r="0.7" fill={p.color} />
+                      </g>
+                    ))}
+                  </svg>
+
+                  {/* Vietnam province map, recoloured to the botanical palette */}
+                  <div className="absolute left-[3%] top-[5%] h-[90%] w-[26.9%]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={asset('/images/vietnam-map-green.png')}
+                      alt="Map of Vietnam highlighting live soil risk zones"
+                      className="h-full w-full object-contain"
+                    />
                   </div>
 
-                  {/* Real Vietnam province map with pins on their true regions */}
-                  <div className="absolute inset-0 flex items-center justify-center px-6 pt-10 pb-5">
-                    <div className="relative h-full aspect-[309/647]">
-                      <div
-                        className="absolute inset-0 scale-110 rounded-full bg-signal/15 blur-xl"
-                        aria-hidden
-                      />
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={asset('/images/vietnam-map.png')}
-                        alt="Map of Vietnam highlighting live soil risk zones"
-                        className="absolute inset-0 h-full w-full object-contain opacity-90"
-                      />
-
-                      {riskZones.map((z) => (
-                        <div
-                          key={z.label}
-                          className="absolute -translate-x-1/2 -translate-y-1/2"
-                          style={{ top: z.top, left: z.left }}
-                        >
-                          <span className="relative flex h-2.5 w-2.5">
-                            <span
-                              className={`absolute inline-flex h-full w-full animate-ping rounded-full ${z.tone} opacity-60`}
-                            />
-                            <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${z.tone}`} />
-                          </span>
-                          <span
-                            className={cn(
-                              'absolute top-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-[9px] uppercase tracking-wider text-white/80',
-                              z.side === 'left' ? 'right-full mr-2 text-right' : 'left-full ml-2',
-                            )}
-                          >
-                            {z.label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* readout panel */}
-                <div className="space-y-4 p-5">
-                  {readouts.map((r) => (
-                    <div key={r.k} className="border-b border-hairline pb-3 last:border-0 last:pb-0">
-                      <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
-                        {r.k}
-                      </div>
-                      <div className="mt-1 flex items-baseline gap-2">
-                        <span className={`font-serif text-2xl font-semibold tracking-tight ${r.tone}`}>
-                          {r.v}
-                        </span>
-                        <span className="text-xs text-ink-muted">{r.sub}</span>
-                      </div>
-                    </div>
+                  {/* pins */}
+                  {pins.map((p) => (
+                    <span
+                      key={p.label}
+                      className="absolute -translate-x-1/2 -translate-y-1/2"
+                      style={{ left: `${p.dot[0]}%`, top: `${p.dot[1]}%` }}
+                    >
+                      <span
+                        className="flex h-4 w-4 items-center justify-center rounded-full"
+                        style={{ backgroundColor: `${p.color}33` }}
+                      >
+                        <span
+                          className="h-2 w-2 rounded-full ring-2 ring-[#EEF2E8]"
+                          style={{ backgroundColor: p.color }}
+                        />
+                      </span>
+                    </span>
                   ))}
-                  <Badge tone="neutral">NDVI · SAR · Soil biology</Badge>
+
+                  {/* labels */}
+                  {pins.map((p) => (
+                    <span
+                      key={p.label}
+                      className="absolute -translate-y-1/2 whitespace-nowrap font-mono text-[10px] tracking-wide text-ink-body"
+                      style={{ left: `${p.lab[0]}%`, top: `${p.lab[1]}%` }}
+                    >
+                      {p.label}
+                    </span>
+                  ))}
+
+                  {/* corner pills */}
+                  <span className="absolute bottom-0 left-0 inline-flex items-center rounded-md border border-hairline bg-surface/85 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-ink-muted">
+                    NDVI · SAR · Soil biology
+                  </span>
+                  <span className="absolute bottom-0 right-0 inline-flex items-center rounded-md border border-alert/30 bg-alert-soft/80 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-alert">
+                    Mekong Delta priority zone
+                  </span>
                 </div>
+
+                {/* legend */}
+                <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline/70 pt-4">
+                  {legend.map((l) => (
+                    <span
+                      key={l.label}
+                      className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wide text-ink-muted"
+                    >
+                      <span
+                        className="h-2.5 w-2.5 rounded-[3px]"
+                        style={{ backgroundColor: l.color }}
+                      />
+                      {l.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* readouts row */}
+              <div className="grid grid-cols-1 divide-y divide-hairline sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+                {readouts.map((r) => (
+                  <div key={r.k} className="px-5 py-4">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
+                      {r.k}
+                    </div>
+                    <div className="mt-1 flex items-baseline gap-2">
+                      <span className={`font-serif text-2xl font-semibold tracking-tight ${r.tone}`}>
+                        {r.v}
+                      </span>
+                      <span className="text-xs text-ink-muted">{r.sub}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </Card>
           </Reveal>
