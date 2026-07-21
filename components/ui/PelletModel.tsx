@@ -39,25 +39,32 @@ export function PelletModel({
 
   const showVideo = !reduce && !videoFailed;
 
-  // Play only while on screen; pause when it scrolls away. play() on a muted
-  // video also kicks off the fetch, so preload can stay "none" until then.
+  // Play only while actually on screen; pause otherwise. Slowing playback a
+  // touch means the decoder handles fewer frames per second, which keeps a
+  // high-bitrate clip smooth without re-encoding it. play() on a muted video
+  // also kicks off the fetch, so preload can stay "none" until then.
   useEffect(() => {
     if (!showVideo) return;
     const el = wrapRef.current;
     const video = videoRef.current;
     if (!el || !video) return;
-    if (typeof IntersectionObserver === 'undefined') {
+    video.playbackRate = 0.7;
+    const play = () => {
+      video.playbackRate = 0.7;
       video.play?.().catch(() => {});
+    };
+    if (typeof IntersectionObserver === 'undefined') {
+      play();
       return;
     }
     const io = new IntersectionObserver(
       (entries) => {
         const e = entries[0];
         if (!e) return;
-        if (e.isIntersecting) video.play?.().catch(() => {});
+        if (e.isIntersecting) play();
         else video.pause?.();
       },
-      { rootMargin: '200px 0px' },
+      { threshold: 0.2 },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -82,8 +89,10 @@ export function PelletModel({
           loop
           playsInline
           preload="none"
+          disablePictureInPicture
           onError={() => setVideoFailed(true)}
           className="absolute inset-0 h-full w-full object-cover"
+          style={{ transform: 'translateZ(0)' }}
         >
           <source src={asset(src)} type="video/mp4" />
         </video>

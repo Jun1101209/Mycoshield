@@ -6,9 +6,6 @@ import {
   HeartHandshake,
   ScanLine,
   Package,
-  Satellite,
-  LineChart,
-  Microscope,
   CornerRightDown,
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
@@ -16,24 +13,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Reveal } from '@/components/ui/Reveal';
-
-const pillars = [
-  {
-    icon: Satellite,
-    title: 'Remote sensing fungal tracking',
-    body: 'AI models track underground biodiversity from satellite telemetry, aligned to the global soil-carbon registry framework.',
-  },
-  {
-    icon: LineChart,
-    title: 'Voluntary carbon markets',
-    body: 'We quantify Glomalin, a stable soil-carbon sink, to issue premium, verifiable soil carbon credits.',
-  },
-  {
-    icon: Microscope,
-    title: 'Premium soil consulting',
-    body: 'Lab analysis and site-specific restoration protocols that turn ESG targets into ground-truthed results.',
-  },
-];
+import { ImageSlot } from '@/components/ui/ImageSlot';
 
 const engine = [
   { icon: Building2, label: 'Enterprise SaaS' },
@@ -58,23 +38,19 @@ export function BusinessModel() {
           lede="Agribusinesses, insurers, NGOs and ministries run the same system across whole regions: dashboards, bulk relief supply and carbon markets, in one loop."
         />
 
-        {/* Commercial pillars */}
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {pillars.map((pillar, i) => (
-            <Reveal key={pillar.title} delay={i * 0.06}>
-              <Card interactive className="h-full p-6">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-botanical-soft/50">
-                  <pillar.icon className="h-5 w-5 text-botanical" strokeWidth={1.75} aria-hidden />
-                </span>
-                <h3 className="mt-5 text-base font-bold text-ink">{pillar.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{pillar.body}</p>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
+        <Reveal className="mt-10">
+          <ImageSlot
+            src="/images/rice-terraces.jpg"
+            alt="Golden terraced rice fields across the hills"
+            ratio="21 / 9"
+            label="rice-terraces.jpg"
+            className="ring-1 ring-hairline"
+            gradient="from-botanical/30 via-amber/20 to-signal/20"
+          />
+        </Reveal>
 
-        {/* Cross-subsidy loop */}
-        <div className="mx-auto mt-8 max-w-3xl space-y-4">
+        {/* Cross-subsidy loop: premium revenue funds free restoration */}
+        <div className="mx-auto mt-10 max-w-3xl space-y-4">
           <Reveal>
             <Card className="p-6">
               <div className="mb-5 flex items-center justify-between">
@@ -126,10 +102,6 @@ export function BusinessModel() {
                   </div>
                 ))}
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-ink-muted">
-                Delivered free to smallholder cooperatives hit by climate shock, rebuilding
-                food security before the damage forces migration.
-              </p>
             </Card>
           </Reveal>
 

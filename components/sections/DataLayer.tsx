@@ -13,14 +13,14 @@ const scans = [
     icon: Satellite,
     tag: 'Sentinel-2 · MSI',
     title: 'Optical multispectral scan',
-    body: 'Thirteen light bands read near-infrared and short-wave infrared off the canopy. When the fungi that govern a plant’s water and chlorophyll fail, they leave a stress signature the eye cannot see but the sensor can.',
+    body: 'Thirteen light bands read the canopy. Failing fungi leave a stress signature the eye cannot see but the sensor can.',
     accent: 'signal' as const,
   },
   {
     icon: Radar,
     tag: 'Sentinel-1 · SAR',
     title: 'Radar structure scan',
-    body: 'Radar sees straight through storm cloud, measuring the ground’s moisture and roughness. Soil that has lost its fungal threads compacts, and that compaction bends the echo returning to orbit.',
+    body: 'Radar sees through storm cloud. Soil that has lost its fungal threads compacts, and that bends the echo back to orbit.',
     accent: 'botanical' as const,
   },
 ];
@@ -122,7 +122,7 @@ export function DataLayer() {
                   <div className="absolute inset-0 flex items-center justify-center px-6 pt-10 pb-5">
                     <div className="relative h-full aspect-[309/647]">
                       <div
-                        className="absolute inset-0 scale-125 rounded-full bg-signal/15 blur-2xl"
+                        className="absolute inset-0 scale-110 rounded-full bg-signal/15 blur-xl"
                         aria-hidden
                       />
                       {/* eslint-disable-next-line @next/next/no-img-element */}

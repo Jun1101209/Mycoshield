@@ -102,13 +102,8 @@ export function SoilCrisis() {
                 The biological bottleneck
               </div>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-body">
-                These fungi are{' '}
-                <strong className="font-semibold text-ink">obligate biotrophs</strong>. They cannot
-                complete their life cycle without a living root, which makes them impossible to
-                mass-produce through conventional fermentation.
-              </p>
-              <p className="mt-3 text-[15px] leading-relaxed text-ink-body">
-                MycoShield&rsquo;s living-carrier pellets are engineered to close exactly that gap.
+                These fungi only grow on living roots, so they cannot be mass-produced the usual
+                way. Our living-carrier pellets close that gap.
               </p>
             </div>
           </Reveal>

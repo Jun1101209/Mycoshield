@@ -1,13 +1,4 @@
-import {
-  Shield,
-  Droplets,
-  Waves,
-  Sun,
-  FlaskRound,
-  Sprout,
-  Thermometer,
-  Beaker,
-} from 'lucide-react';
+import { Shield, Droplets, Waves, Sun, Sprout } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -22,21 +13,21 @@ const layers = [
     n: '01',
     icon: Shield,
     material: 'Bagasse shell',
-    body: 'Compressed sugarcane fiber shields the pellet through shipping and burial, then releases simple carbon to wake the fungi.',
+    body: 'Compressed sugarcane fiber shields the pellet, then releases carbon to wake the fungi.',
     color: '#8A5A32',
   },
   {
     n: '02',
     icon: Droplets,
     material: 'Coconut coir core',
-    body: 'A porous micro-refuge holds water and a hospitable pH while the spores germinate in the soil.',
+    body: 'A porous core holds water and a hospitable pH while the spores germinate.',
     color: '#C6902F',
   },
   {
     n: '03',
     icon: Sprout,
     material: 'Native-strain AM spores',
-    body: 'Fungal spores matched to the region’s own soil chemistry, ready to re-thread the underground network on contact with moisture.',
+    body: 'Spores matched to the region’s soil, ready to re-thread the network below.',
     color: '#1F6B43',
   },
 ];
@@ -155,8 +146,8 @@ type Product = {
   target: string;
   accent: 'botanical' | 'amber';
   icon: LucideIcon;
-  strains: { name: string; role: string }[];
-  additives: { icon: LucideIcon; text: string }[];
+  strains: string[];
+  additive: string;
 };
 
 const products: Product[] = [
@@ -167,30 +158,18 @@ const products: Product[] = [
     target: 'Heavily salinated soils',
     accent: 'botanical',
     icon: Waves,
-    strains: [
-      { name: 'Claroideoglomus etunicatum', role: 'Halotolerant ionic filter' },
-      { name: 'Funneliformis geosporum', role: 'Blocks toxic Na and Cl, pumps K' },
-    ],
-    additives: [
-      { icon: FlaskRound, text: 'Gypsum displaces sodium locked in the soil' },
-      { icon: Beaker, text: 'Slow-dissolving alginate coating' },
-    ],
+    strains: ['Claroideoglomus etunicatum', 'Funneliformis geosporum'],
+    additive: 'Gypsum and an alginate coating displace soil sodium.',
   },
   {
     id: 'arid',
     name: 'Arid-Guard',
     region: 'Central Highlands',
-    target: 'Arid and drought-stricken regions',
+    target: 'Arid and drought-stricken soils',
     accent: 'amber',
     icon: Sun,
-    strains: [
-      { name: 'Rhizophagus irregularis', role: 'Aggressive hyphal network builder' },
-      { name: 'Funneliformis mosseae', role: 'Crawls into micro soil pores' },
-    ],
-    additives: [
-      { icon: Droplets, text: 'Cornstarch hydrogel holds 300× its weight in water' },
-      { icon: Thermometer, text: 'Humic acids for early root vigor' },
-    ],
+    strains: ['Rhizophagus irregularis', 'Funneliformis mosseae'],
+    additive: 'Cornstarch hydrogel and humic acids hold water and boost root vigor.',
   },
 ];
 
@@ -218,40 +197,15 @@ function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div className="grid gap-5 px-6 py-5 sm:grid-cols-2">
-        <div>
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
-            <Sprout className="h-4 w-4 text-botanical" strokeWidth={2} aria-hidden />
-            Fungal strains
-          </div>
-          <ul className="mt-3 space-y-3">
-            {product.strains.map((s) => (
-              <li key={s.name}>
-                <div className="text-sm font-bold italic text-ink">{s.name}</div>
-                <div className="mt-0.5 text-xs text-ink-muted">{s.role}</div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
-            <FlaskRound className="h-4 w-4 text-amber-deep" strokeWidth={2} aria-hidden />
-            Engineered additives
-          </div>
-          <ul className="mt-3 space-y-3">
-            {product.additives.map((a) => (
-              <li key={a.text} className="flex items-start gap-2.5">
-                <a.icon className="mt-0.5 h-4 w-4 shrink-0 text-ink-muted" strokeWidth={1.75} aria-hidden />
-                <span className="text-sm leading-relaxed text-ink-body">{a.text}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="px-6 pb-5">
-        <Badge tone={product.accent}>Deployment zone · {product.region}</Badge>
+      <div className="space-y-3 px-6 py-5">
+        <p className="text-sm leading-relaxed text-ink-body">
+          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+            Strains ·{' '}
+          </span>
+          <span className="italic">{product.strains.join(', ')}</span>
+        </p>
+        <p className="text-sm leading-relaxed text-ink-body">{product.additive}</p>
+        <Badge tone={product.accent}>{product.region}</Badge>
       </div>
     </Card>
   );
