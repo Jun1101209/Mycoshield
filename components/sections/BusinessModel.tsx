@@ -3,17 +3,28 @@ import {
   Leaf,
   Handshake,
   ArrowDown,
+  ArrowRight,
   HeartHandshake,
   ScanLine,
   Package,
   CornerRightDown,
+  LineChart,
+  Sprout,
+  LayoutDashboard,
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { ImageSlot } from '@/components/ui/ImageSlot';
+
+const perks = [
+  { icon: LayoutDashboard, label: 'Live risk dashboard' },
+  { icon: LineChart, label: 'Carbon reporting' },
+  { icon: Sprout, label: 'Priority relief supply' },
+];
 
 const engine = [
   { icon: Building2, label: 'Enterprise SaaS' },
@@ -35,18 +46,65 @@ export function BusinessModel() {
           eyebrow="For Organizations"
           accent="green"
           title="MycoShield Plus is built for scale"
-          lede="Agribusinesses, insurers, NGOs and ministries run the same system across whole regions: dashboards, bulk relief supply and carbon markets, in one loop."
+          lede="Agribusinesses, insurers, NGOs and ministries run the same system across whole regions, dashboards, bulk relief and carbon markets in one loop."
         />
 
+        {/* Prominent subscription banner */}
         <Reveal className="mt-10">
-          <ImageSlot
-            src="/images/rice-terraces.jpg"
-            alt="Golden terraced rice fields across the hills"
-            ratio="21 / 9"
-            label="rice-terraces.jpg"
-            className="ring-1 ring-hairline"
-            gradient="from-botanical/30 via-amber/20 to-signal/20"
-          />
+          <div
+            id="subscription"
+            className="relative scroll-mt-24 overflow-hidden rounded-3xl border border-hairline bg-ink px-6 py-12 sm:px-10 sm:py-14"
+          >
+            <div className="pointer-events-none absolute inset-0 opacity-35" aria-hidden>
+              <ImageSlot
+                src="/images/rice-terraces.jpg"
+                alt=""
+                ratio="21 / 9"
+                rounded="rounded-none"
+                className="h-full w-full"
+                gradient="from-botanical/40 via-botanical-deep/30 to-ink"
+              />
+            </div>
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/45"
+              aria-hidden
+            />
+
+            <div className="relative grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-signal">
+                  <span className="h-1.5 w-1.5 rounded-full bg-signal animate-pulse-dot" aria-hidden />
+                  Enterprise subscription
+                </div>
+                <h3 className="mt-4 max-w-xl font-serif text-[clamp(1.6rem,3.2vw,2.4rem)] font-semibold leading-tight text-white">
+                  Subscribe to live soil-risk intelligence
+                </h3>
+                <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-white/70">
+                  Agribusinesses and insurers get a live regional dashboard, verifiable carbon
+                  reporting and priority relief supply.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {perks.map((p) => (
+                    <span
+                      key={p.label}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/90"
+                    >
+                      <p.icon className="h-3.5 w-3.5 text-signal" strokeWidth={2} aria-hidden />
+                      {p.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lg:justify-self-end">
+                <Button as="a" href="#contact">
+                  Request access
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
+                </Button>
+              </div>
+            </div>
+          </div>
         </Reveal>
 
         {/* Cross-subsidy loop: premium revenue funds free restoration */}
