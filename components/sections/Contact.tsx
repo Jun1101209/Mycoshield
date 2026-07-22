@@ -59,6 +59,20 @@ export function Contact() {
                 <Phone className="h-4 w-4" strokeWidth={2} aria-hidden />
                 +61 408 373 875
               </a>
+
+              <div className="mt-8 border-t border-white/10 pt-6">
+                <a
+                  href="#subscription"
+                  className="group inline-flex items-center gap-2 rounded-full border border-signal/40 bg-signal/10 px-4 py-2.5 text-sm font-semibold text-signal transition-colors hover:bg-signal/20"
+                >
+                  Wanna know more about our subscription?
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                    strokeWidth={2.25}
+                    aria-hidden
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </Reveal>
