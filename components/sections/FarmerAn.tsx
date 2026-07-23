@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { X, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
-type Scene = { tag: string; cap: string; chip?: string; accent: string };
+type Scene = { tag: string; cap: string; accent: string };
 
-// Content lifted from the original Farmer An story, trimmed and em-dash free.
+// The guided Farmer An story: scan, diagnosis, then the MycoShield Plus
+// features. Kept to plain narration — no telemetry chips, those live in the
+// Hero where the numbers actually mean something.
 const scenes: Scene[] = [
   {
     tag: 'Meet Farmer An',
@@ -16,13 +18,11 @@ const scenes: Scene[] = [
   {
     tag: 'Satellite scanning',
     cap: 'Pulling optical and radar readings from orbit, then matching them with soil-biology risk patterns.',
-    chip: 'NDVI Δ −0.34 · SAR anomaly',
     accent: 'text-signal-deep',
   },
   {
     tag: 'Diagnosis',
-    cap: 'This soil just lost 80% of its fungal network. The crop still looks green, but the system below is already stressed.',
-    chip: '80% AM deficit',
+    cap: 'This soil just lost most of its fungal network. The crop still looks green, but the system below is already stressed.',
     accent: 'text-alert',
   },
   {
@@ -52,20 +52,33 @@ const scenes: Scene[] = [
   },
 ];
 
+/** Fire this to open Farmer An from anywhere on the page. */
+export const FARMER_AN_OPEN_EVENT = 'farmer-an:open';
+
 /**
- * "Farmer An", the brand mascot. Content is the original guided story (scan,
- * diagnosis, then the MycoShield Plus features), restyled into a compact
- * step-through popover so the heavy feature copy lives here instead of crowding
- * the page. Motion is CSS-only and paused under prefers-reduced-motion.
+ * "Farmer An", the brand mascot. A prominent corner launcher opens the guided
+ * story as a centered modal (dimmed backdrop, toggle on/off). Any element on
+ * the page can open it by dispatching the FARMER_AN_OPEN_EVENT window event.
+ * Motion is CSS-only and eases out under prefers-reduced-motion.
  */
 export function FarmerAn() {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const panelRef = useRef<HTMLDivElement>(null);
-  const btnRef = useRef<HTMLButtonElement>(null);
   const scene = scenes[step];
   const last = step === scenes.length - 1;
 
+  // Let other sections open the modal (e.g. the "Ask Farmer An" prompt).
+  useEffect(() => {
+    const onOpen = () => {
+      setStep(0);
+      setOpen(true);
+    };
+    window.addEventListener(FARMER_AN_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(FARMER_AN_OPEN_EVENT, onOpen);
+  }, []);
+
+  // Keyboard controls + body scroll lock while the modal is open.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -73,117 +86,135 @@ export function FarmerAn() {
       if (e.key === 'ArrowRight') setStep((s) => Math.min(scenes.length - 1, s + 1));
       if (e.key === 'ArrowLeft') setStep((s) => Math.max(0, s - 1));
     };
-    const onClick = (e: MouseEvent) => {
-      const t = e.target as Node;
-      if (panelRef.current?.contains(t) || btnRef.current?.contains(t)) return;
-      setOpen(false);
-    };
     document.addEventListener('keydown', onKey);
-    document.addEventListener('mousedown', onClick);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     return () => {
       document.removeEventListener('keydown', onKey);
-      document.removeEventListener('mousedown', onClick);
+      document.body.style.overflow = prevOverflow;
     };
   }, [open]);
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+    <>
+      {/* Centered modal */}
       {open && (
-        <div
-          ref={panelRef}
-          role="dialog"
-          aria-label="Meet Farmer An"
-          className="w-[min(21rem,calc(100vw-2.5rem))] overflow-hidden rounded-2xl border border-hairline bg-surface shadow-lift"
-        >
-          <div className="relative flex items-center gap-3 bg-botanical-soft/60 px-5 pb-4 pt-5">
-            <FarmerSvg className="h-20 w-20 shrink-0 animate-bob" />
-            <div className="min-w-0">
-              <div className={cn('font-mono text-[10px] uppercase tracking-[0.16em]', scene.accent)}>
-                {scene.tag}
-              </div>
-              <p className="mt-1 font-serif text-[15px] leading-snug text-ink">{scene.cap}</p>
-            </div>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-ink/60 backdrop-blur-sm animate-fade-in"
+            onClick={() => setOpen(false)}
+            aria-hidden
+          />
+
+          <div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Meet Farmer An"
+            className="relative flex max-h-[calc(100vh-2rem)] w-[min(30rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border border-hairline bg-surface shadow-lift animate-pop-in"
+          >
             <button
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full text-ink-muted hover:bg-surface hover:text-ink"
+              className="absolute right-3.5 top-3.5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-surface/70 text-ink-muted backdrop-blur transition-colors hover:bg-mist hover:text-ink"
             >
               <X className="h-4 w-4" strokeWidth={2} aria-hidden />
             </button>
-          </div>
 
-          <div className="px-5 py-4">
-            {scene.chip && (
-              <span className="inline-flex rounded-md border border-hairline bg-mist px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-muted">
-                {scene.chip}
-              </span>
-            )}
-
-            {last && (
-              <a
-                href="mailto:habisbabi.contactforwork@gmail.com"
-                className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-botanical hover:text-botanical-deep"
-              >
-                Talk to the team
-                <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
-              </a>
-            )}
-
-            {/* progress + controls */}
-            <div className="mt-4 flex items-center justify-between">
-              <div className="flex items-center gap-1.5" aria-hidden>
-                {scenes.map((_, i) => (
-                  <span
-                    key={i}
-                    className={cn(
-                      'h-1.5 rounded-full transition-all',
-                      i === step ? 'w-4 bg-botanical' : 'w-1.5 bg-hairline',
-                    )}
-                  />
-                ))}
+            <div className="flex flex-col items-center gap-3 bg-botanical-soft/60 px-6 pb-6 pt-8 text-center">
+              <FarmerSvg className="h-28 w-28 shrink-0 animate-bob" />
+              <div>
+                <div className={cn('font-mono text-[11px] uppercase tracking-[0.16em]', scene.accent)}>
+                  {scene.tag}
+                </div>
+                <p className="mx-auto mt-2 max-w-sm font-serif text-lg leading-snug text-ink">
+                  {scene.cap}
+                </p>
               </div>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setStep((s) => Math.max(0, s - 1))}
-                  disabled={step === 0}
-                  aria-label="Previous"
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-hairline text-ink-muted hover:text-ink disabled:opacity-40"
-                >
-                  <ChevronLeft className="h-4 w-4" strokeWidth={2} aria-hidden />
-                </button>
-                <button
-                  onClick={() => setStep((s) => Math.min(scenes.length - 1, s + 1))}
-                  disabled={last}
-                  aria-label="Next"
-                  className="flex h-8 w-8 items-center justify-center rounded-full border border-hairline text-ink-muted hover:text-ink disabled:opacity-40"
-                >
-                  <ChevronRight className="h-4 w-4" strokeWidth={2} aria-hidden />
-                </button>
+            </div>
+
+            <div className="px-6 py-5">
+              {last && (
+                <div className="mb-4 flex justify-center">
+                  <a
+                    href="mailto:habisbabi.contactforwork@gmail.com"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-botanical px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-botanical-deep"
+                  >
+                    Talk to the team
+                    <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
+                  </a>
+                </div>
+              )}
+
+              {/* progress + controls */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5" aria-hidden>
+                  {scenes.map((_, i) => (
+                    <span
+                      key={i}
+                      className={cn(
+                        'h-1.5 rounded-full transition-all',
+                        i === step ? 'w-4 bg-botanical' : 'w-1.5 bg-hairline',
+                      )}
+                    />
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setStep((s) => Math.max(0, s - 1))}
+                    disabled={step === 0}
+                    aria-label="Previous"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline text-ink-muted transition-colors hover:text-ink disabled:opacity-40"
+                  >
+                    <ChevronLeft className="h-4 w-4" strokeWidth={2} aria-hidden />
+                  </button>
+                  <button
+                    onClick={() => setStep((s) => Math.min(scenes.length - 1, s + 1))}
+                    disabled={last}
+                    aria-label="Next"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-hairline text-ink-muted transition-colors hover:text-ink disabled:opacity-40"
+                  >
+                    <ChevronRight className="h-4 w-4" strokeWidth={2} aria-hidden />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
+      {/* Prominent corner launcher */}
       <button
-        ref={btnRef}
         onClick={() => {
           setOpen((v) => !v);
           if (!open) setStep(0);
         }}
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-label={open ? 'Close Farmer An' : 'Ask Farmer An'}
-        className="group flex items-center gap-2.5 rounded-full border border-hairline bg-surface py-1.5 pl-1.5 pr-4 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-card-hover"
+        aria-label={open ? 'Close Farmer An' : 'Meet Farmer An'}
+        className="group fixed bottom-5 right-5 z-[70] flex items-center gap-3 rounded-full border border-botanical/25 bg-surface py-2 pl-2 pr-5 shadow-card-hover ring-1 ring-botanical/10 transition-all hover:-translate-y-0.5 hover:shadow-lift sm:bottom-6 sm:right-6"
       >
-        <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-botanical-soft/70">
-          <FarmerSvg className="h-10 w-10" />
+        <span className="relative flex h-14 w-14 items-center justify-center">
+          {!open && (
+            <span
+              className="absolute inset-0 rounded-full bg-botanical/40 animate-ring-pulse motion-reduce:hidden"
+              aria-hidden
+            />
+          )}
+          <span className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-botanical-soft ring-2 ring-botanical/30">
+            <FarmerSvg className="h-12 w-12" />
+          </span>
         </span>
-        <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink">
-          {open ? 'Close' : 'Ask Farmer An'}
+        <span className="flex flex-col items-start leading-tight">
+          <span className="font-serif text-[15px] font-semibold text-ink">
+            {open ? 'Close' : 'Farmer An'}
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-botanical">
+            {open ? 'tap to hide' : 'tap to meet'}
+          </span>
         </span>
       </button>
-    </div>
+    </>
   );
 }
 
