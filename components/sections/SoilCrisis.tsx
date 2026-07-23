@@ -1,4 +1,4 @@
-import { CloudLightning, Network, HeartCrack, Ban, Microscope } from 'lucide-react';
+import { CloudLightning, Network, TrendingDown, Ban, Microscope } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -18,27 +18,27 @@ const steps: Step[] = [
     icon: CloudLightning,
     stage: 'Trigger',
     title: 'Extreme weather',
-    body: 'Floods, storms and salt intrusion shear the soil profile in days.',
+    body: 'Floods, droughts and salinity disrupt soil biology.',
   },
   {
     icon: Network,
     stage: 'Collapse',
-    title: 'Up to 85% of fungal networks lost',
-    body: 'The web that moves water and nutrients underground is severed.',
+    title: 'AMF loss',
+    body: 'Beneficial fungi decline, reducing water and nutrient uptake.',
     danger: true,
   },
   {
-    icon: HeartCrack,
+    icon: TrendingDown,
     stage: 'Symptom',
-    title: 'Clinical soil infertility',
-    body: 'The surface looks intact while the biology below goes silent.',
+    title: 'Lower productivity',
+    body: 'Fertilizers become less effective as soil health deteriorates.',
     danger: true,
   },
   {
     icon: Ban,
     stage: 'Outcome',
-    title: 'Resowing fails',
-    body: 'Replanted crops cannot rebuild symbiosis, so yields fail again.',
+    title: 'Difficult recovery',
+    body: 'Without restoring soil biology, replanting alone is often not enough.',
     danger: true,
   },
 ];
@@ -49,10 +49,10 @@ export function SoilCrisis() {
       <Container>
         <SectionHeading
           index="01"
-          eyebrow="The invisible crisis"
+          eyebrow="The Challenge"
           accent="ochre"
-          title="The field looks fine. The engine beneath it has gone quiet."
-          lede="Long before a crop looks stressed, the living network under it has already broken. The damage runs underground, in silence."
+          title="Healthy crops don’t always mean healthy soil."
+          lede="Extreme weather weakens the biological systems that support root growth and nutrient uptake. By the time crops show visible symptoms, recovery is often slower and more expensive."
         />
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
@@ -99,11 +99,12 @@ export function SoilCrisis() {
                 <Microscope className="h-5 w-5 text-botanical" strokeWidth={1.75} aria-hidden />
               </span>
               <div className="mt-5 font-mono text-xs uppercase tracking-[0.14em] text-botanical">
-                The biological bottleneck
+                Why AMF?
               </div>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-body">
-                These fungi only grow on living roots, so they cannot be mass-produced the usual
-                way. Our living-carrier pellets close that gap.
+                AMF only grow with living roots, which makes large-scale restoration difficult.
+                Myco-Pellet delivers native AMF directly into the root zone, where colonization
+                begins naturally.
               </p>
             </div>
           </Reveal>

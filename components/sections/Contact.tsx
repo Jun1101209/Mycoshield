@@ -1,4 +1,4 @@
-import { ArrowRight, Mail, Phone } from 'lucide-react';
+import { ArrowRight, Mail, Phone, Package, FileText } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
@@ -31,34 +31,52 @@ export function Contact() {
                 Partner with MycoShield
               </div>
               <h2 className="text-[clamp(1.9rem,4vw,2.9rem)] leading-tight text-white">
-                Ready to see what is happening under your fields?
+                Ready to restore your soil?
               </h2>
               <p className="mt-4 max-w-xl text-lg leading-relaxed text-white/70">
-                Book a soil audit for your region, or request a site-specific restoration
-                protocol from our team. We reply within two working days.
+                Identify biological risks early and restore soil health with targeted,
+                science-backed solutions. We reply within two working days.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Button as="a" href="mailto:habisbabi.contactforwork@gmail.com">
-                  Email the team
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <Button as="a" href="mailto:habisbabi.contactforwork@gmail.com?subject=Enterprise%20Soil%20Audit%20request">
+                  Request an Enterprise Soil Audit
                   <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
                 </Button>
                 <Button
                   as="a"
-                  href="mailto:habisbabi.contactforwork@gmail.com"
+                  href="mailto:habisbabi.contactforwork@gmail.com?subject=Myco-Pellet%20Starter%20Pack%20order"
                   variant="outline"
                   className="border-white/20 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
                 >
-                  <Mail className="h-4 w-4" strokeWidth={2} aria-hidden />
-                  habisbabi.contactforwork@gmail.com
+                  <Package className="h-4 w-4" strokeWidth={2} aria-hidden />
+                  Order Myco-Pellet Starter Packs
+                </Button>
+                <Button
+                  as="a"
+                  href="mailto:habisbabi.contactforwork@gmail.com?subject=Technical%20Whitepaper%20request"
+                  variant="outline"
+                  className="border-white/20 bg-white/5 text-white hover:border-white/40 hover:bg-white/10"
+                >
+                  <FileText className="h-4 w-4" strokeWidth={2} aria-hidden />
+                  Download the Technical Whitepaper
                 </Button>
               </div>
-              <a
-                href="tel:+61408373875"
-                className="mt-5 inline-flex items-center gap-2 font-mono text-sm text-white/60 transition-colors hover:text-signal"
-              >
-                <Phone className="h-4 w-4" strokeWidth={2} aria-hidden />
-                +61 408 373 875
-              </a>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+                <a
+                  href="mailto:habisbabi.contactforwork@gmail.com"
+                  className="inline-flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-signal"
+                >
+                  <Mail className="h-4 w-4" strokeWidth={2} aria-hidden />
+                  habisbabi.contactforwork@gmail.com
+                </a>
+                <a
+                  href="tel:+61408373875"
+                  className="inline-flex items-center gap-2 font-mono text-sm text-white/60 transition-colors hover:text-signal"
+                >
+                  <Phone className="h-4 w-4" strokeWidth={2} aria-hidden />
+                  +61 408 373 875
+                </a>
+              </div>
 
               <div className="mt-8 border-t border-white/10 pt-6">
                 <a

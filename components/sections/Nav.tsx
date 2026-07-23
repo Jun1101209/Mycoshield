@@ -9,10 +9,10 @@ import { cn } from '@/lib/cn';
 
 // Home-anchored ("/#id") + base-path aware so the nav works from any route.
 const links = [
-  { href: '/#signal', label: 'Technology' },
+  { href: '/#signal', label: 'AI Intelligence' },
   { href: '/#dashboard', label: 'Dashboard' },
   { href: '/#pellet', label: 'Myco-Pellet' },
-  { href: '/#organizations', label: 'For Organizations' },
+  { href: '/#organizations', label: 'Enterprise' },
 ];
 
 export function Nav() {

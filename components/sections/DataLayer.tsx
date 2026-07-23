@@ -1,4 +1,4 @@
-import { Satellite, Radar, Circle } from 'lucide-react';
+import { Satellite, Radar, Circle, Map } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Card } from '@/components/ui/Card';
@@ -9,18 +9,32 @@ import { asset } from '@/lib/asset';
 const scans = [
   {
     icon: Satellite,
-    tag: 'Sentinel-2 · MSI',
-    title: 'Optical multispectral scan',
-    body: 'Thirteen light bands read the canopy. Failing fungi leave a stress signature the eye cannot see but the sensor can.',
+    tag: 'Sentinel-2 · Optical',
+    title: 'Sentinel-2',
+    body: 'Optical multispectral imagery monitors early vegetation stress, long before it is visible from the ground.',
     accent: 'signal' as const,
   },
   {
     icon: Radar,
-    tag: 'Sentinel-1 · SAR',
-    title: 'Radar structure scan',
-    body: 'Radar sees through storm cloud. Soil that has lost its fungal threads compacts, and that bends the echo back to orbit.',
+    tag: 'Sentinel-1 · Radar',
+    title: 'Sentinel-1',
+    body: 'Radar tracks soil moisture in all weather conditions, seeing through cloud, storm and night.',
     accent: 'botanical' as const,
   },
+  {
+    icon: Map,
+    tag: 'AI · Risk model',
+    title: 'Risk mapping',
+    body: 'A model fuses both signals to highlight vulnerable areas across major agricultural regions.',
+    accent: 'signal' as const,
+  },
+];
+
+// The path from a flagged field to a restored one, in three plain steps.
+const workflow = [
+  { n: '1', body: 'AI identifies high-risk fields.' },
+  { n: '2', body: 'The system recommends the right Myco-Pellet.' },
+  { n: '3', body: 'Targeted deployment begins.' },
 ];
 
 const readouts = [
@@ -58,13 +72,13 @@ export function DataLayer() {
       <Container>
         <SectionHeading
           index="02"
-          eyebrow="Orbit"
+          eyebrow="AI Soil Intelligence"
           accent="signal"
-          title="Two satellites read what the eye can’t"
-          lede="Long before a field looks stressed, its light and its radar echo have already shifted. MycoShield fuses two public constellations to catch that first signal."
+          title="Detect soil stress before crops show visible damage."
+          lede="MycoShield combines optical and radar satellite imagery with AI to identify fields at risk and prioritize restoration before yield losses occur."
         />
 
-        <div className="mt-12 grid gap-4 lg:grid-cols-2">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {scans.map((s, i) => (
             <Reveal key={s.tag} delay={i * 0.07}>
               <Card className="h-full p-6">
@@ -96,10 +110,10 @@ export function DataLayer() {
         {/* Layer 02 · Fusion */}
         <div id="dashboard" className="mt-20 scroll-mt-24">
           <SectionHeading
-            eyebrow="Fusion"
+            eyebrow="Risk mapping"
             accent="green"
             title="Vietnam, mapped from sky, radar and soil"
-            lede="A self-supervised model cross-references optical scans and radar structure against soil biology, turning indirect surface readings into a live, nationwide map of what is happening below the field."
+            lede="The model cross-references optical scans and radar structure against soil biology, turning indirect surface readings into a live map of vulnerable areas across major agricultural regions."
           />
 
           <Reveal className="mt-12">
@@ -233,6 +247,27 @@ export function DataLayer() {
               </div>
             </Card>
           </Reveal>
+        </div>
+
+        {/* How it works — detection to restoration */}
+        <div className="mt-20">
+          <SectionHeading
+            eyebrow="How it works"
+            accent="green"
+            title="From detection to restoration."
+          />
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {workflow.map((w, i) => (
+              <Reveal key={w.n} delay={i * 0.07}>
+                <Card className="h-full p-6">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-botanical font-serif text-lg font-semibold text-white">
+                    {w.n}
+                  </span>
+                  <p className="mt-4 text-[15px] leading-relaxed text-ink-body">{w.body}</p>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </Container>
     </section>
