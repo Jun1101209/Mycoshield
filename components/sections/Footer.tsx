@@ -8,7 +8,7 @@ const groups = [
   {
     title: 'Platform',
     links: [
-      { label: 'AI Intelligence', href: '/#signal' },
+      { label: 'Technology', href: '/#signal' },
       { label: 'Dashboard', href: '/#dashboard' },
       { label: 'Myco-Pellet', href: '/#pellet' },
       { label: 'Enterprise', href: '/#organizations' },
