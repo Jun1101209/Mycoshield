@@ -194,7 +194,7 @@ function ProductCard({ product }: { product: Product }) {
           <product.icon className="h-6 w-6 text-white" strokeWidth={1.75} aria-hidden />
         </span>
         <div>
-          <h4 className="text-xl font-extrabold text-ink">{product.name}</h4>
+          <h4 className="text-xl font-bold text-ink">{product.name}</h4>
           <p className="text-sm text-ink-muted">{product.target}</p>
         </div>
       </div>

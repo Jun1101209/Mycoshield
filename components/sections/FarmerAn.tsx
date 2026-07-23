@@ -219,7 +219,7 @@ export function FarmerAn() {
 }
 
 /** Compact Vietnamese farmer bust with a nón lá. Flat vectors, no gradients. */
-function FarmerSvg({ className }: { className?: string }) {
+export function FarmerSvg({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 120 120" className={className} role="img" aria-label="Farmer An">
       <ellipse cx="60" cy="112" rx="30" ry="5" fill="#13241C" opacity="0.14" />
