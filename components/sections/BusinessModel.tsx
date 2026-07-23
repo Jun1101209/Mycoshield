@@ -7,7 +7,6 @@ import {
   HeartHandshake,
   ScanLine,
   Package,
-  CornerRightDown,
   LineChart,
   Sprout,
   LayoutDashboard,
@@ -19,6 +18,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { ImageSlot } from '@/components/ui/ImageSlot';
+import { AskFarmerAn } from '@/components/ui/AskFarmerAn';
 
 const perks = [
   { icon: LayoutDashboard, label: 'Live risk dashboard' },
@@ -164,10 +164,9 @@ export function BusinessModel() {
           </Reveal>
 
           <Reveal delay={0.12}>
-            <p className="flex items-center justify-center gap-2 pt-2 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
-              <CornerRightDown className="h-4 w-4 text-botanical" strokeWidth={2} aria-hidden />
-              Ask Farmer An in the corner for the full picture
-            </p>
+            <div className="flex justify-center pt-2">
+              <AskFarmerAn />
+            </div>
           </Reveal>
         </div>
       </Container>

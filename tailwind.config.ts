@@ -81,6 +81,18 @@ const config: Config = {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-6px)' },
         },
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        'pop-in': {
+          from: { opacity: '0', transform: 'translateY(12px) scale(0.97)' },
+          to: { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
+        'ring-pulse': {
+          '0%': { transform: 'scale(1)', opacity: '0.5' },
+          '70%, 100%': { transform: 'scale(1.6)', opacity: '0' },
+        },
       },
       animation: {
         'pulse-dot': 'pulse-dot 2.4s ease-in-out infinite',
@@ -88,6 +100,9 @@ const config: Config = {
         'spin-slow': 'spin-slow 26s linear infinite',
         'spore-drift': 'spore-drift 5s ease-in-out infinite',
         bob: 'bob 4s ease-in-out infinite',
+        'fade-in': 'fade-in 0.2s ease-out',
+        'pop-in': 'pop-in 0.28s cubic-bezier(0.22, 1, 0.36, 1)',
+        'ring-pulse': 'ring-pulse 2.4s ease-out infinite',
       },
     },
   },
