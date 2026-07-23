@@ -10,6 +10,7 @@ import {
   LineChart,
   Sprout,
   LayoutDashboard,
+  Landmark,
 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -19,6 +20,19 @@ import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { ImageSlot } from '@/components/ui/ImageSlot';
 import { AskFarmerAn } from '@/components/ui/AskFarmerAn';
+
+const audiences = [
+  {
+    icon: Building2,
+    title: 'Agribusiness',
+    body: 'Monitor farming zones, reduce fertilizer waste, and improve soil management across operations.',
+  },
+  {
+    icon: Landmark,
+    title: 'Governments & NGOs',
+    body: 'Support disaster response, restoration planning, and climate resilience at a regional scale.',
+  },
+];
 
 const perks = [
   { icon: LayoutDashboard, label: 'Live risk dashboard' },
@@ -43,11 +57,26 @@ export function BusinessModel() {
       <Container>
         <SectionHeading
           index="04"
-          eyebrow="For Organizations"
+          eyebrow="Enterprise Solutions"
           accent="green"
-          title="MycoShield Plus is built for scale"
-          lede="Agribusinesses, insurers, NGOs and ministries run the same system across whole regions, dashboards, bulk relief and carbon markets in one loop."
+          title="Built for agriculture at every scale."
+          lede="From single farms to national recovery programs, organizations run the same system, dashboards, bulk relief and carbon markets, in one connected loop."
         />
+
+        {/* Who it is for */}
+        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+          {audiences.map((a, i) => (
+            <Reveal key={a.title} delay={i * 0.07}>
+              <Card className="h-full p-7">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-botanical-soft/60">
+                  <a.icon className="h-6 w-6 text-botanical" strokeWidth={1.75} aria-hidden />
+                </span>
+                <h3 className="mt-5 text-xl font-bold text-ink">{a.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">{a.body}</p>
+              </Card>
+            </Reveal>
+          ))}
+        </div>
 
         {/* Prominent subscription banner */}
         <Reveal className="mt-10">

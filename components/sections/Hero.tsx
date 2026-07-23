@@ -32,35 +32,36 @@ export function Hero() {
             <Reveal>
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
                 <Satellite className="h-3.5 w-3.5 text-botanical" strokeWidth={2} aria-hidden />
-                Vietnam-ready agricultural intelligence
+                MycoShield Agricultural Intelligence
               </div>
             </Reveal>
 
             <Reveal delay={0.05}>
               <h1 className="text-[clamp(2.35rem,5.4vw,4.15rem)] leading-[1.05]">
-                The rice field looks alive.{' '}
+                Restore soil health{' '}
                 <em className="font-normal italic text-botanical">
-                  Underground, the network is already breaking.
+                  before crop losses begin.
                 </em>
               </h1>
             </Reveal>
 
             <Reveal delay={0.1}>
               <p className="mt-6 text-lg leading-relaxed text-ink-body">
-                After floods, storms and salt intrusion, mycorrhizal fungi collapse
-                days before the crop shows it. MycoShield reads that invisible signal
-                from orbit and from the soil, then ships the fix.
+                Floods, droughts and saltwater intrusion can damage soil biology long
+                before crops show visible stress. MycoShield combines satellite
+                intelligence with biological restoration to identify at-risk fields
+                early and accelerate soil recovery.
               </p>
             </Reveal>
 
             <Reveal delay={0.15}>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button as="a" href="#signal">
-                  See how the scan works
+                  See How the Scan Works
                   <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
                 </Button>
                 <Button as="a" href="#contact" variant="outline">
-                  Request a soil audit
+                  Request a Soil Audit
                 </Button>
               </div>
             </Reveal>

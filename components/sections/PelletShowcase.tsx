@@ -13,21 +13,21 @@ const layers = [
     n: '01',
     icon: Shield,
     material: 'Bagasse shell',
-    body: 'Compressed sugarcane fiber shields the pellet, then releases carbon to wake the fungi.',
+    body: 'Made from sugarcane by-product, it protects the spores and adds organic carbon to the soil.',
     color: '#8A5A32',
   },
   {
     n: '02',
     icon: Droplets,
-    material: 'Coconut coir core',
-    body: 'A porous core holds water and a hospitable pH while the spores germinate.',
+    material: 'Coconut coir',
+    body: 'A porous core retains moisture around the root zone while the spores establish.',
     color: '#C6902F',
   },
   {
     n: '03',
     icon: Sprout,
-    material: 'Native-strain AM spores',
-    body: 'Spores matched to the region’s soil, ready to re-thread the network below.',
+    material: 'Native AMF',
+    body: 'Region-matched spores rebuild fungal networks and improve nutrient uptake.',
     color: '#1F6B43',
   },
 ];
@@ -38,10 +38,10 @@ export function PelletShowcase() {
       <Container>
         <SectionHeading
           index="03"
-          eyebrow="The living fix · Circular economy"
+          eyebrow="Myco-Pellet"
           accent="ochre"
-          title="Sugarcane shell. Coconut core. Living spores."
-          lede="The moment the dashboard flags a red zone, the fix is already biodegradable, built from farm waste that would otherwise be burned."
+          title="A biological solution for degraded soils."
+          lede="Made from agricultural by-products, Myco-Pellet protects native AMF spores and creates favorable conditions for soil recovery."
         />
 
         {/* 3D model + numbered anatomy */}
@@ -84,10 +84,10 @@ export function PelletShowcase() {
           <Reveal>
             <div className="flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-[0.16em] text-amber-deep">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-deep" aria-hidden />
-              Targeted solutions
+              Regional formulations
             </div>
             <h3 className="mt-3 max-w-2xl text-2xl font-bold text-ink">
-              One platform, tuned strain by strain to each region’s soil.
+              Optimized for local soil conditions.
             </h3>
           </Reveal>
 
@@ -153,23 +153,25 @@ type Product = {
 const products: Product[] = [
   {
     id: 'delta',
-    name: 'Delta-Shield',
-    region: 'Mekong River Delta',
-    target: 'Heavily salinated soils',
+    name: 'Delta Shield',
+    region: 'Mekong Delta',
+    target: 'Saline soils',
     accent: 'botanical',
     icon: Waves,
     strains: ['Claroideoglomus etunicatum', 'Funneliformis geosporum'],
-    additive: 'Gypsum and an alginate coating displace soil sodium.',
+    additive:
+      'Designed for saline soils in the Mekong Delta, using salt-tolerant AMF and soil conditioners to improve nutrient uptake.',
   },
   {
     id: 'arid',
-    name: 'Arid-Guard',
-    region: 'Central Highlands',
-    target: 'Arid and drought-stricken soils',
+    name: 'Arid Guard',
+    region: 'Drought-prone regions',
+    target: 'Drought and heat',
     accent: 'amber',
     icon: Sun,
     strains: ['Rhizophagus irregularis', 'Funneliformis mosseae'],
-    additive: 'Cornstarch hydrogel and humic acids hold water and boost root vigor.',
+    additive:
+      'Designed for drought-prone regions, combining drought-adapted AMF with moisture-retaining materials to improve water availability.',
   },
 ];
 

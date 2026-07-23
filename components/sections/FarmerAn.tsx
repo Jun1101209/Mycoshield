@@ -12,22 +12,27 @@ type Scene = { tag: string; cap: string; accent: string };
 const scenes: Scene[] = [
   {
     tag: 'Meet Farmer An',
-    cap: 'Hi, I’m Farmer An. Let’s check what is happening under this rice field.',
+    cap: 'Hi, I’m Farmer An. Let’s look at what is happening under this rice field.',
     accent: 'text-botanical',
   },
   {
     tag: 'Satellite scanning',
-    cap: 'Pulling optical and radar readings from orbit, then matching them with soil-biology risk patterns.',
+    cap: 'Sentinel-2 reads crop stress from orbit, while Sentinel-1 radar tracks soil moisture through cloud and storm.',
     accent: 'text-signal-deep',
   },
   {
     tag: 'Diagnosis',
-    cap: 'This soil just lost most of its fungal network. The crop still looks green, but the system below is already stressed.',
+    cap: 'The crop still looks green, but the fungal network below has thinned, so water and nutrients no longer reach the roots.',
     accent: 'text-alert',
   },
   {
-    tag: 'MycoShield Plus',
-    cap: 'Here is how our features support farmers, agribusinesses and public recovery programs at scale.',
+    tag: 'The Myco-Pellet fix',
+    cap: 'A bagasse shell and coconut-coir core carry native AMF straight to the root zone, where colonization begins naturally.',
+    accent: 'text-botanical',
+  },
+  {
+    tag: 'For organizations',
+    cap: 'Here is how the platform supports farmers, agribusinesses and public recovery programs at scale.',
     accent: 'text-botanical',
   },
   {
@@ -41,14 +46,9 @@ const scenes: Scene[] = [
     accent: 'text-amber-deep',
   },
   {
-    tag: 'Carbon markets',
-    cap: 'Every buried pellet locks carbon two ways, Glomalin from living fungi and the biochar shell, verified and sold as ecological credits.',
+    tag: 'Free for smallholders',
+    cap: 'Premium subscriptions, carbon credits and consulting fund restoration that reaches smallholder farmers at no cost.',
     accent: 'text-botanical',
-  },
-  {
-    tag: 'Soil consulting',
-    cap: 'Our agronomists ground-truth your fields, design recovery protocols, and certify farms for regenerative and ESG standards.',
-    accent: 'text-signal-deep',
   },
 ];
 

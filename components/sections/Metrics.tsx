@@ -11,10 +11,10 @@ type Metric = {
 };
 
 const metrics: Metric[] = [
-  { value: '45–62%', label: 'Higher salinity and drought tolerance', icon: Droplets },
-  { value: '97%', label: 'Seedling survival and root attachment', icon: Sprout },
-  { value: '3×', label: 'Faster soil recovery, 18 months to under 6', icon: Timer },
-  { value: '35–50%', label: 'Better phosphorus and micronutrient uptake', icon: FlaskConical },
+  { value: 'Up to 62%', label: 'Greater drought and salinity tolerance', icon: Droplets },
+  { value: '97%', label: 'Seedling survival in degraded soils', icon: Sprout },
+  { value: 'Up to 3×', label: 'Faster soil recovery', icon: Timer },
+  { value: '35–50%', label: 'Higher nutrient uptake', icon: FlaskConical },
 ];
 
 export function Metrics() {
@@ -24,7 +24,7 @@ export function Metrics() {
         <Reveal>
           <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-signal">
             <span className="h-1.5 w-1.5 rounded-full bg-signal animate-pulse-dot" aria-hidden />
-            Proven in the field
+            Field results
           </div>
         </Reveal>
 
